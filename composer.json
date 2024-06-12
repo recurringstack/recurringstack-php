@@ -1,6 +1,6 @@
 {
     "name": "recurringstack/client",
-    "description": "This repository houses the official php client for the RecurringStackT API.",
+    "description": "This repository houses the official php client for the RecurringStackT API. Official Release",
     "type": "library",
     "license": "MIT",
     "autoload": {
