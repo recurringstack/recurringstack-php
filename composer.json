@@ -1,0 +1,20 @@
+{
+    "name": "recurringstack/client",
+    "description": "This repository houses the official php client for the RecurringStackT API.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "recurringstack\\client\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hawkins Technology Group LLC",
+            "email": "developers@recurringstack.com"
+        }
+    ],
+    "require": {
+        "guzzle/guzzle": "^3.9"
+    }
+}
