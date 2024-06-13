@@ -1,6 +1,6 @@
 <?php
-namespace recurringstack\api;
-
+namespace recurringstack;
+use GuzzleHttp\Client;
 
 /*
                                _                 _             _                             __ _                
@@ -13,7 +13,7 @@ namespace recurringstack\api;
                                        |___/                                                                     
 */    
 
-class client {
+class api {
   
     public function __construct($key,$user_key,$brand_id,$response_format,$response_type) {
 
