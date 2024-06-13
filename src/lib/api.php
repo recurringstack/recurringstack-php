@@ -1,5 +1,5 @@
 <?php
-namespace recurringstack;
+namespace recurringstack\api;
 use GuzzleHttp\Client;
 
 /*
