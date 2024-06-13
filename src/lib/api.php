@@ -2590,7 +2590,7 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     }
 
     //Decoded
-    if ($this->return != 'clean') { return $response->getBody()->getContents();  }else{ return $decoded;  };
+    if ($this->response_type != 'clean') { return $response->getBody()->getContents();  }else{ return $decoded;  };
 
 }
 
