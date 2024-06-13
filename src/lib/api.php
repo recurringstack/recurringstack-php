@@ -1,7 +1,4 @@
 <?php
-namespace recurringstack;
-use GuzzleHttp\Client;
-
 /*
                                _                 _             _                             __ _                
                               (_)               | |           | |                           / /| |               
@@ -12,43 +9,50 @@ use GuzzleHttp\Client;
                                         __/ |                                                                    
                                        |___/                                                                     
 */    
+namespace recurringstack;
+
+use GuzzleHttp\Client;
+
+//Handles custom exceptions.
+require 'ExceptionController.php';
 
 class api {
   
-    public function __construct($key,$user_key,$brand_id,$response_format,$response_type) {
+    public function __construct($auth = array()) {
 
-      $this->response_format = strtolower($response_format);
-      $this->key = $key;
-      $this->user_key = $user_key;
-      $this->brand_id = $brand_id;
-      $this->response_type = strtolower($response_type); //When set to 'clean' it returns PHP object otherwise the raw XML or JSON.
-      $this->checkConfiguration();
+        $this->response_format = strtolower($auth['response_format']);
+        $this->key = $auth['key'];
+        $this->user_key = $auth['user_key'];
+        $this->brand_id = $auth['brand_id'];
+        $this->response_type = strtolower($auth['response_type']); //When set to 'clean' it returns PHP object otherwise the raw XML or JSON.
+        $this->checkConfiguration();
+  
+      }
 
-
-    }
-
-               /****
+ 
+    
+                /****
                  
                 ### List/Account
 
                   ::: List all customer accounts connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 300.
                                
 
-			$optional_parameters = array(
-			"offset" => '',
- 			"order" => '',
- 			"limit" => '',
- 			"custom_field_2" => '',
- 			"custom_field_1" => '',
- 			"company_name" => '',
- 			"last_name" => '',
- 			"first_name" => '',
+			$clientParameters = array(
+			"customer_account_id" => '',
  			"email_address" => '',
- 			"customer_account_id" => '');
+ 			"first_name" => '',
+ 			"last_name" => '',
+ 			"company_name" => '',
+ 			"custom_field_1" => '',
+ 			"custom_field_2" => '',
+ 			"limit" => '',
+ 			"order" => '',
+ 			"offset" => '');
 
                 ****/
 
-                public function listAccount($optional_parameters = array()) {
+                public function listAccount($clientParameters = array()) {
 		
 
                     $http = $this->http('GET','Account/List',$req_parameters,$optional_parameters); 
@@ -62,38 +66,38 @@ class api {
                       ::: Create a new customer account and associate it with a brand. The initial user will be created based on the information and e-mail address provided.
                                    
     
-                $optional_parameters = array(
-                "skip_notification" => '',
-                 "password" => '',
-                 "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "tax_exempt_reason" => '',
-                 "tax_exempt" => '',
-                 "tax_id" => '',
-                 "zip_code" => '',
-                 "state" => '',
-                 "city" => '',
-                 "unit_type" => '',
-                 "unit" => '',
-                 "address_2" => '',
-                 "address" => '',
-                 "phone_number" => '',
-                 "phone_number_country_code" => '',
+                $clientParameters = array(
+                "company_name" => '',
                  "cc_email_address" => '',
-                 "company_name" => '');
+                 "phone_number_country_code" => '',
+                 "phone_number" => '',
+                 "address" => '',
+                 "address_2" => '',
+                 "unit" => '',
+                 "unit_type" => '',
+                 "city" => '',
+                 "state" => '',
+                 "zip_code" => '',
+                 "tax_id" => '',
+                 "tax_exempt" => '',
+                 "tax_exempt_reason" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '',
+                 "password" => '',
+                 "skip_notification" => '');
     
                     ****/
     
-                    public function createAccount($timezone_id,$locale,$country,$email_address,$last_name,$first_name,$optional_parameters = array()) {
+                    public function createAccount($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "timezone_id" => $timezone_id,
-                     "locale" => $locale,
-                     "country" => $country,
-                     "email_address" => $email_address,
-                     "last_name" => $last_name,
-                     "first_name" => $first_name		);
+            "timezone_id" => $clientParameters['timezone_id'],
+                     "locale" => $clientParameters['locale'],
+                     "country" => $clientParameters['country'],
+                     "email_address" => $clientParameters['email_address'],
+                     "last_name" => $clientParameters['last_name'],
+                     "first_name" => $clientParameters['first_name']		);
     
                     $http = $this->http('POST','Account/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -106,37 +110,37 @@ class api {
                       ::: Update information on an existing customers account.	
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "tax_exempt_reason" => '',
-                 "tax_exempt" => '',
-                 "tax_id" => '',
-                 "timezone_id" => '',
-                 "locale" => '',
-                 "country" => '',
-                 "zip_code" => '',
-                 "state" => '',
-                 "city" => '',
-                 "unit_type" => '',
-                 "unit" => '',
-                 "address_2" => '',
-                 "address" => '',
-                 "phone_number" => '',
-                 "phone_number_country_code" => '',
-                 "cc_email_address" => '',
-                 "email_address" => '',
-                 "last_name" => '',
+                $clientParameters = array(
+                "company_name" => '',
                  "first_name" => '',
-                 "company_name" => '');
+                 "last_name" => '',
+                 "email_address" => '',
+                 "cc_email_address" => '',
+                 "phone_number_country_code" => '',
+                 "phone_number" => '',
+                 "address" => '',
+                 "address_2" => '',
+                 "unit" => '',
+                 "unit_type" => '',
+                 "city" => '',
+                 "state" => '',
+                 "zip_code" => '',
+                 "country" => '',
+                 "locale" => '',
+                 "timezone_id" => '',
+                 "tax_id" => '',
+                 "tax_exempt" => '',
+                 "tax_exempt_reason" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function updateAccount($customer_account_id,$optional_parameters = array()) {
+                    public function updateAccount($customer_account_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "customer_account_id" => $customer_account_id		);
+            "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('PATCH','Account/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -155,7 +159,7 @@ class api {
             
     
                 $req_parameters = array(
-            "customer_account_id" => $customer_account_id		);
+            "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('PATCH','Account/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -174,7 +178,7 @@ class api {
             
     
                 $req_parameters = array(
-            "customer_account_id" => $customer_account_id		);
+            "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('DELETE','Account/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -193,7 +197,7 @@ class api {
             
     
                 $req_parameters = array(
-            "customer_account_id" => $customer_account_id		);
+            "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('PATCH','Account/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -206,14 +210,14 @@ class api {
                       ::: List one or more library articles using the specified search criteria.
                                    
     
-                $optional_parameters = array(
-                "tags" => '',
+                $clientParameters = array(
+                "article_id" => '',
                  "category_id" => '',
-                 "article_id" => '');
+                 "tags" => '');
     
                     ****/
     
-                    public function listArticle($optional_parameters = array()) {
+                    public function listArticle($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Article/List',$req_parameters,$optional_parameters); 
@@ -227,20 +231,20 @@ class api {
                       ::: Create a new article in the library under a category or sub category.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "summary" => '');
     
                     ****/
     
-                    public function createArticle($visibility,$tags,$contents,$title,$category_id,$optional_parameters = array()) {
+                    public function createArticle($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "visibility" => $visibility,
-                     "tags" => $tags,
-                     "contents" => $contents,
-                     "title" => $title,
-                     "category_id" => $category_id		);
+            "visibility" => $clientParameters['visibility'],
+                     "tags" => $clientParameters['tags'],
+                     "contents" => $clientParameters['contents'],
+                     "title" => $clientParameters['title'],
+                     "category_id" => $clientParameters['category_id']		);
     
                     $http = $this->http('POST','Article/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -253,21 +257,21 @@ class api {
                       ::: Update an existing library article.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "summary" => '');
     
                     ****/
     
-                    public function updateArticle($visibility,$tags,$contents,$title,$category_id,$article_id,$optional_parameters = array()) {
+                    public function updateArticle($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "visibility" => $visibility,
-                     "tags" => $tags,
-                     "contents" => $contents,
-                     "title" => $title,
-                     "category_id" => $category_id,
-                     "article_id" => $article_id		);
+            "visibility" => $clientParameters['visibility'],
+                     "tags" => $clientParameters['tags'],
+                     "contents" => $clientParameters['contents'],
+                     "title" => $clientParameters['title'],
+                     "category_id" => $clientParameters['category_id'],
+                     "article_id" => $clientParameters['article_id']		);
     
                     $http = $this->http('PATCH','Article/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -286,7 +290,7 @@ class api {
             
     
                 $req_parameters = array(
-            "article_id" => $article_id		);
+            "article_id" => $clientParameters['article_id']		);
     
                     $http = $this->http('DELETE','Article/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -305,7 +309,7 @@ class api {
             
     
                 $req_parameters = array(
-            "article_id" => $article_id		);
+            "article_id" => $clientParameters['article_id']		);
     
                     $http = $this->http('PATCH','Article/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -318,13 +322,13 @@ class api {
                       ::: List all of the brands connected to your RecurringStack™ account. Depending on your subscription, one RecurringStack™ account can support up to ten different brands.
                                    
     
-                $optional_parameters = array(
-                "limit" => '',
-                 "search_brand_id" => '');
+                $clientParameters = array(
+                "search_brand_id" => '',
+                 "limit" => '');
     
                     ****/
     
-                    public function listBrand($optional_parameters = array()) {
+                    public function listBrand($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Brand/List',$req_parameters,$optional_parameters); 
@@ -338,28 +342,28 @@ class api {
                       ::: Create a new brand or company.
                                    
     
-                $optional_parameters = array(
-                "social_media_instagram" => '',
-                 "social_media_youtube" => '',
-                 "social_media_twitter" => '',
-                 "social_media_facebook" => '',
-                 "privacy_url" => '',
-                 "terms_url" => '',
-                 "support_phone" => '',
-                 "support_link" => '',
-                 "support_email" => '',
+                $clientParameters = array(
+                "website_url" => '',
                  "website_login_url" => '',
-                 "website_url" => '');
+                 "support_email" => '',
+                 "support_link" => '',
+                 "support_phone" => '',
+                 "terms_url" => '',
+                 "privacy_url" => '',
+                 "social_media_facebook" => '',
+                 "social_media_twitter" => '',
+                 "social_media_youtube" => '',
+                 "social_media_instagram" => '');
     
                     ****/
     
-                    public function createBrand($logo_url,$description,$name,$optional_parameters = array()) {
+                    public function createBrand($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "logo_url" => $logo_url,
-                     "description" => $description,
-                     "name" => $name		);
+            "logo_url" => $clientParameters['logo_url'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name']		);
     
                     $http = $this->http('POST','Brand/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -372,29 +376,29 @@ class api {
                       ::: Update an existing brand. Only pass the parameters you wish to update.
                                    
     
-                $optional_parameters = array(
-                "social_media_instagram" => '',
-                 "social_media_youtube" => '',
-                 "social_media_twitter" => '',
-                 "social_media_facebook" => '',
-                 "privacy_url" => '',
-                 "terms_url" => '',
-                 "support_phone" => '',
-                 "support_link" => '',
-                 "support_email" => '',
-                 "website_login_url" => '',
-                 "website_url" => '',
-                 "logo_url" => '',
+                $clientParameters = array(
+                "name" => '',
                  "description" => '',
-                 "name" => '');
+                 "logo_url" => '',
+                 "website_url" => '',
+                 "website_login_url" => '',
+                 "support_email" => '',
+                 "support_link" => '',
+                 "support_phone" => '',
+                 "terms_url" => '',
+                 "privacy_url" => '',
+                 "social_media_facebook" => '',
+                 "social_media_twitter" => '',
+                 "social_media_youtube" => '',
+                 "social_media_instagram" => '');
     
                     ****/
     
-                    public function updateBrand($update_brand_id,$optional_parameters = array()) {
+                    public function updateBrand($update_brand_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "update_brand_id" => $update_brand_id		);
+            "update_brand_id" => $clientParameters['update_brand_id']		);
     
                     $http = $this->http('PATCH','Brand/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -413,7 +417,7 @@ class api {
             
     
                 $req_parameters = array(
-            "delete_brand_id" => $delete_brand_id		);
+            "delete_brand_id" => $clientParameters['delete_brand_id']		);
     
                     $http = $this->http('DELETE','Brand/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -426,16 +430,16 @@ class api {
                       ::: List all categorys in a brands knowledgebase library.
                                    
     
-                $optional_parameters = array(
-                "show_sub_categories" => '',
-                 "name" => '',
-                 "parent_category_id" => '',
+                $clientParameters = array(
+                "category_id" => '',
                  "category_type" => '',
-                 "category_id" => '');
+                 "parent_category_id" => '',
+                 "name" => '',
+                 "show_sub_categories" => '');
     
                     ****/
     
-                    public function listCategory($optional_parameters = array()) {
+                    public function listCategory($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Category/List',$req_parameters,$optional_parameters); 
@@ -449,19 +453,19 @@ class api {
                       ::: Create a primary or sub category in the knowledgebase library.
                                    
     
-                $optional_parameters = array(
-                "parent_category_id" => '',
-                 "summary" => '');
+                $clientParameters = array(
+                "summary" => '',
+                 "parent_category_id" => '');
     
                     ****/
     
-                    public function createCategory($visibility,$category_type,$name,$optional_parameters = array()) {
+                    public function createCategory($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "visibility" => $visibility,
-                     "category_type" => $category_type,
-                     "name" => $name		);
+            "visibility" => $clientParameters['visibility'],
+                     "category_type" => $clientParameters['category_type'],
+                     "name" => $clientParameters['name']		);
     
                     $http = $this->http('POST','Category/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -474,20 +478,20 @@ class api {
                       ::: Update a category.
                                    
     
-                $optional_parameters = array(
-                "parent_category_id" => '',
-                 "summary" => '');
+                $clientParameters = array(
+                "summary" => '',
+                 "parent_category_id" => '');
     
                     ****/
     
-                    public function updateCategory($visibility,$category_type,$name,$category_id,$optional_parameters = array()) {
+                    public function updateCategory($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "visibility" => $visibility,
-                     "category_type" => $category_type,
-                     "name" => $name,
-                     "category_id" => $category_id		);
+            "visibility" => $clientParameters['visibility'],
+                     "category_type" => $clientParameters['category_type'],
+                     "name" => $clientParameters['name'],
+                     "category_id" => $clientParameters['category_id']		);
     
                     $http = $this->http('PATCH','Category/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -506,7 +510,7 @@ class api {
             
     
                 $req_parameters = array(
-            "category_id" => $category_id		);
+            "category_id" => $clientParameters['category_id']		);
     
                     $http = $this->http('DELETE','Category/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -525,7 +529,7 @@ class api {
             
     
                 $req_parameters = array(
-            "category_id" => $category_id		);
+            "category_id" => $clientParameters['category_id']		);
     
                     $http = $this->http('PATCH','Category/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -538,14 +542,14 @@ class api {
                       ::: List all components or all components nested under the specified 'product_group_id'. If no 'product_group_id' is provided then all components nested under the 'brand_id' will be returned. To retrieve a specific componet provide the 'component_id'. Max results 300.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
+                $clientParameters = array(
+                "component_id" => '',
                  "custom_field_1" => '',
-                 "component_id" => '');
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function listComponent($optional_parameters = array()) {
+                    public function listComponent($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Component/List',$req_parameters,$optional_parameters); 
@@ -559,25 +563,25 @@ class api {
                       ::: Create a new components. Components are like add-on's for an exsiting product. A customer subscribed to a product will have the ability to add components from the product group of the subscribed product. Components allow you to track usage, charge for additional services, and more. There are three types of components:<b>TRADITIONAL</b>: A traditional add-on that has a set price ('unit_price') and is billed on a recurring basis with the subscription (eg. server backup service for X/month).<b>METERED</b>: Great for services where the amount changes during the billing cycle and resets to zero at the beginning of the next cycle. (e.g. data used for IoT or cloud storage space). You can use the 'Subscription/ReportUsage' API to update the current usage amount at anytime. <b>QUANTITATIVE</b>: Recurring quantity-based components are used to bill for the number of some unit (e.g. IP addresses; SaaS users; or software licenses). Additional units can be added to the subscription at anytime (eg. customer wishes to add IP address to hosting package).
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "setup_fee" => '',
+                $clientParameters = array(
+                "starting_quantity" => '',
                  "maximum_units" => '',
-                 "starting_quantity" => '');
+                 "setup_fee" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function createComponent($taxable,$unit_price,$description,$name,$product_group_id,$component_type,$optional_parameters = array()) {
+                    public function createComponent($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "taxable" => $taxable,
-                     "unit_price" => $unit_price,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id,
-                     "component_type" => $component_type		);
+            "taxable" => $clientParameters['taxable'],
+                     "unit_price" => $clientParameters['unit_price'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id'],
+                     "component_type" => $clientParameters['component_type']		);
     
                     $http = $this->http('POST','Component/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -590,26 +594,26 @@ class api {
                       ::: Update an existing component.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "setup_fee" => '',
+                $clientParameters = array(
+                "starting_quantity" => '',
                  "maximum_units" => '',
-                 "starting_quantity" => '');
+                 "setup_fee" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function updateComponent($taxable,$unit_price,$description,$name,$product_group_id,$component_type,$component_id,$optional_parameters = array()) {
+                    public function updateComponent($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "taxable" => $taxable,
-                     "unit_price" => $unit_price,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id,
-                     "component_type" => $component_type,
-                     "component_id" => $component_id		);
+            "taxable" => $clientParameters['taxable'],
+                     "unit_price" => $clientParameters['unit_price'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id'],
+                     "component_type" => $clientParameters['component_type'],
+                     "component_id" => $clientParameters['component_id']		);
     
                     $http = $this->http('PATCH','Component/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -628,7 +632,7 @@ class api {
             
     
                 $req_parameters = array(
-            "component_id" => $component_id		);
+            "component_id" => $clientParameters['component_id']		);
     
                     $http = $this->http('PATCH','Component/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -647,7 +651,7 @@ class api {
             
     
                 $req_parameters = array(
-            "component_id" => $component_id		);
+            "component_id" => $clientParameters['component_id']		);
     
                     $http = $this->http('DELETE','Component/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -666,7 +670,7 @@ class api {
             
     
                 $req_parameters = array(
-            "component_id" => $component_id		);
+            "component_id" => $clientParameters['component_id']		);
     
                     $http = $this->http('POST','Component/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -679,13 +683,13 @@ class api {
                       ::: List coupons connected to a product group or for the entire brand. To list a specific coupon provide a 'coupon_id'.
                                    
     
-                $optional_parameters = array(
-                "product_group_id" => '',
-                 "coupon_id" => '');
+                $clientParameters = array(
+                "coupon_id" => '',
+                 "product_group_id" => '');
     
                     ****/
     
-                    public function listCoupon($optional_parameters = array()) {
+                    public function listCoupon($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Coupon/List',$req_parameters,$optional_parameters); 
@@ -699,26 +703,26 @@ class api {
                       ::: Create a new coupon and assign it to specific products. All coupons must be assigned to a product group, meaning they will only work with products from that group.
                                    
     
-                $optional_parameters = array(
-                "max_use" => '',
-                 "restricted_products" => '');
+                $clientParameters = array(
+                "restricted_products" => '',
+                 "max_use" => '');
     
                     ****/
     
-                    public function createCoupon($stackable,$expiration_time,$expiration_date,$discount_amount,$coupon_duration,$coupon_type,$coupon_code,$description,$name,$product_group_id,$optional_parameters = array()) {
+                    public function createCoupon($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "stackable" => $stackable,
-                     "expiration_time" => $expiration_time,
-                     "expiration_date" => $expiration_date,
-                     "discount_amount" => $discount_amount,
-                     "coupon_duration" => $coupon_duration,
-                     "coupon_type" => $coupon_type,
-                     "coupon_code" => $coupon_code,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id		);
+            "stackable" => $clientParameters['stackable'],
+                     "expiration_time" => $clientParameters['expiration_time'],
+                     "expiration_date" => $clientParameters['expiration_date'],
+                     "discount_amount" => $clientParameters['discount_amount'],
+                     "coupon_duration" => $clientParameters['coupon_duration'],
+                     "coupon_type" => $clientParameters['coupon_type'],
+                     "coupon_code" => $clientParameters['coupon_code'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('POST','Coupon/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -731,27 +735,27 @@ class api {
                       ::: Update an existing coupon.
                                    
     
-                $optional_parameters = array(
-                "max_use" => '',
-                 "restricted_products" => '');
+                $clientParameters = array(
+                "restricted_products" => '',
+                 "max_use" => '');
     
                     ****/
     
-                    public function updateCoupon($stackable,$expiration_time,$expiration_date,$discount_amount,$coupon_duration,$coupon_type,$coupon_code,$description,$name,$product_group_id,$coupon_id,$optional_parameters = array()) {
+                    public function updateCoupon($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "stackable" => $stackable,
-                     "expiration_time" => $expiration_time,
-                     "expiration_date" => $expiration_date,
-                     "discount_amount" => $discount_amount,
-                     "coupon_duration" => $coupon_duration,
-                     "coupon_type" => $coupon_type,
-                     "coupon_code" => $coupon_code,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id,
-                     "coupon_id" => $coupon_id		);
+            "stackable" => $clientParameters['stackable'],
+                     "expiration_time" => $clientParameters['expiration_time'],
+                     "expiration_date" => $clientParameters['expiration_date'],
+                     "discount_amount" => $clientParameters['discount_amount'],
+                     "coupon_duration" => $clientParameters['coupon_duration'],
+                     "coupon_type" => $clientParameters['coupon_type'],
+                     "coupon_code" => $clientParameters['coupon_code'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id'],
+                     "coupon_id" => $clientParameters['coupon_id']		);
     
                     $http = $this->http('PATCH','Coupon/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -770,7 +774,7 @@ class api {
             
     
                 $req_parameters = array(
-            "coupon_id" => $coupon_id		);
+            "coupon_id" => $clientParameters['coupon_id']		);
     
                     $http = $this->http('DELETE','Coupon/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -783,12 +787,12 @@ class api {
                       ::: List all dunning rules for one or more product groups.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "product_group_id" => '');
     
                     ****/
     
-                    public function listDunningRule($optional_parameters = array()) {
+                    public function listDunningRule($clientParameters = array()) {
             
     
                     $http = $this->http('GET','DunningRule/List',$req_parameters,$optional_parameters); 
@@ -802,21 +806,21 @@ class api {
                       ::: Create a new dunning rule. Dunning rules determine when a subscription is suspended or deleted based on the status of past-due invoices linked to the subscription.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "post_url" => '');
     
                     ****/
     
-                    public function createDunningRule($enforcement_action,$overdue_amount,$overdue_days,$description,$name,$product_group_id,$optional_parameters = array()) {
+                    public function createDunningRule($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "enforcement_action" => $enforcement_action,
-                     "overdue_amount" => $overdue_amount,
-                     "overdue_days" => $overdue_days,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id		);
+            "enforcement_action" => $clientParameters['enforcement_action'],
+                     "overdue_amount" => $clientParameters['overdue_amount'],
+                     "overdue_days" => $clientParameters['overdue_days'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('POST','DunningRule/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -829,22 +833,22 @@ class api {
                       ::: Update an existing dunning rule.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "post_url" => '');
     
                     ****/
     
-                    public function updateDunningRule($enforcement_action,$overdue_amount,$overdue_days,$description,$name,$product_group_id,$rule_id,$optional_parameters = array()) {
+                    public function updateDunningRule($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "enforcement_action" => $enforcement_action,
-                     "overdue_amount" => $overdue_amount,
-                     "overdue_days" => $overdue_days,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id,
-                     "rule_id" => $rule_id		);
+            "enforcement_action" => $clientParameters['enforcement_action'],
+                     "overdue_amount" => $clientParameters['overdue_amount'],
+                     "overdue_days" => $clientParameters['overdue_days'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id'],
+                     "rule_id" => $clientParameters['rule_id']		);
     
                     $http = $this->http('PATCH','DunningRule/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -863,7 +867,7 @@ class api {
             
     
                 $req_parameters = array(
-            "rule_id" => $rule_id		);
+            "rule_id" => $clientParameters['rule_id']		);
     
                     $http = $this->http('DELETE','DunningRule/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -876,16 +880,16 @@ class api {
                       ::: List all invoices connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 50. If a 'customer_account_id' or 'subscription_id' are provided a maximum of 400 results is returned.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "subscription_id" => '',
+                $clientParameters = array(
+                "invoice_id" => '',
                  "customer_account_id" => '',
-                 "invoice_id" => '');
+                 "subscription_id" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function listInvoice($optional_parameters = array()) {
+                    public function listInvoice($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Invoice/List',$req_parameters,$optional_parameters); 
@@ -899,20 +903,20 @@ class api {
                       ::: Create a manual invoice. This service allows you to send invoices to customers for services outside of any subscription. 
                                    
     
-                $optional_parameters = array(
-                "auto_subscription_id" => '',
-                 "custom_field_2" => '',
+                $clientParameters = array(
+                "attached_items" => '',
                  "custom_field_1" => '',
-                 "attached_items" => '');
+                 "custom_field_2" => '',
+                 "auto_subscription_id" => '');
     
                     ****/
     
-                    public function createInvoice($due_date,$customer_account_id,$optional_parameters = array()) {
+                    public function createInvoice($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "due_date" => $due_date,
-                     "customer_account_id" => $customer_account_id		);
+            "due_date" => $clientParameters['due_date'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','Invoice/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -925,18 +929,18 @@ class api {
                       ::: Update an existing invoice.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "attached_items" => '');
     
                     ****/
     
-                    public function updateInvoice($due_date,$customer_account_id,$invoice_id,$optional_parameters = array()) {
+                    public function updateInvoice($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "due_date" => $due_date,
-                     "customer_account_id" => $customer_account_id,
-                     "invoice_id" => $invoice_id		);
+            "due_date" => $clientParameters['due_date'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "invoice_id" => $clientParameters['invoice_id']		);
     
                     $http = $this->http('PATCH','Invoice/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -951,12 +955,12 @@ class api {
     
                     ****/
     
-                    public function deleteInvoice($customer_account_id,$invoice_id) {
+                    public function deleteInvoice() {
             
     
                 $req_parameters = array(
-            "customer_account_id" => $customer_account_id,
-                     "invoice_id" => $invoice_id		);
+            "customer_account_id" => $clientParameters['customer_account_id'],
+                     "invoice_id" => $clientParameters['invoice_id']		);
     
                     $http = $this->http('DELETE','Invoice/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -969,17 +973,17 @@ class api {
                       ::: Send the 'Invoice/Reminder' notification to a customer.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "bypass_overdue" => '');
     
                     ****/
     
-                    public function reminderInvoice($invoice_id,$customer_account_id,$optional_parameters = array()) {
+                    public function reminderInvoice($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "invoice_id" => $invoice_id,
-                     "customer_account_id" => $customer_account_id		);
+            "invoice_id" => $clientParameters['invoice_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','Invoice/Reminder',$req_parameters,$optional_parameters); 
                         return $http;
@@ -992,13 +996,13 @@ class api {
                       ::: List one or more API keys or search for API keys using one or more of the parameters.
                                    
     
-                $optional_parameters = array(
-                "connected_brand_id" => '',
-                 "name" => '');
+                $clientParameters = array(
+                "name" => '',
+                 "connected_brand_id" => '');
     
                     ****/
     
-                    public function listKey($optional_parameters = array()) {
+                    public function listKey($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Key/List',$req_parameters,$optional_parameters); 
@@ -1014,12 +1018,12 @@ class api {
     
                     ****/
     
-                    public function createKey($brands,$name) {
+                    public function createKey() {
             
     
                 $req_parameters = array(
-            "brands" => $brands,
-                     "name" => $name		);
+            "brands" => $clientParameters['brands'],
+                     "name" => $clientParameters['name']		);
     
                     $http = $this->http('POST','Key/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1034,13 +1038,13 @@ class api {
     
                     ****/
     
-                    public function updateKey($brands,$name,$api_key_id) {
+                    public function updateKey() {
             
     
                 $req_parameters = array(
-            "brands" => $brands,
-                     "name" => $name,
-                     "api_key_id" => $api_key_id		);
+            "brands" => $clientParameters['brands'],
+                     "name" => $clientParameters['name'],
+                     "api_key_id" => $clientParameters['api_key_id']		);
     
                     $http = $this->http('PATCH','Key/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1059,7 +1063,7 @@ class api {
             
     
                 $req_parameters = array(
-            "api_key_id" => $api_key_id		);
+            "api_key_id" => $clientParameters['api_key_id']		);
     
                     $http = $this->http('DELETE','Key/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1072,15 +1076,15 @@ class api {
                       ::: List notes connected to an account, subscription, or invoice.
                                    
     
-                $optional_parameters = array(
-                "invoice_id" => '',
-                 "subscription_id" => '',
+                $clientParameters = array(
+                "note_id" => '',
                  "customer_account_id" => '',
-                 "note_id" => '');
+                 "subscription_id" => '',
+                 "invoice_id" => '');
     
                     ****/
     
-                    public function listNote($optional_parameters = array()) {
+                    public function listNote($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Note/List',$req_parameters,$optional_parameters); 
@@ -1094,19 +1098,19 @@ class api {
                       ::: Notes allow you to store short messages (or notes) on the stack and connect them with a customer account, invoice, or subscription for easy cross referencing. If you have formatted data to store consider using one of 'custom_field_1' or 'custom_field_2', both of which are available on subscriptions, accounts, and invoices.
                                    
     
-                $optional_parameters = array(
-                "invoice_id" => '',
+                $clientParameters = array(
+                "customer_account_id" => '',
                  "subscription_id" => '',
-                 "customer_account_id" => '');
+                 "invoice_id" => '');
     
                     ****/
     
-                    public function createNote($contents,$subject,$optional_parameters = array()) {
+                    public function createNote($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "contents" => $contents,
-                     "subject" => $subject		);
+            "contents" => $clientParameters['contents'],
+                     "subject" => $clientParameters['subject']		);
     
                     $http = $this->http('POST','Note/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1125,7 +1129,7 @@ class api {
             
     
                 $req_parameters = array(
-            "note_id" => $note_id		);
+            "note_id" => $clientParameters['note_id']		);
     
                     $http = $this->http('DELETE','Note/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1138,13 +1142,13 @@ class api {
                       ::: Use this service to list and search for email notifications.
                                    
     
-                $optional_parameters = array(
-                "notification_event" => '',
-                 "notification_id" => '');
+                $clientParameters = array(
+                "notification_id" => '',
+                 "notification_event" => '');
     
                     ****/
     
-                    public function listNotification($optional_parameters = array()) {
+                    public function listNotification($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Notification/List',$req_parameters,$optional_parameters); 
@@ -1158,23 +1162,23 @@ class api {
                       ::: Create and customize a new email notification. Notifications can be triggered for select events on the RecurringStack™ platform. You can choose to send a customized notification to yourself (the brand) and/or the customer.Until and unless a notification is setup you or your customers will not receive any emails from the RecurringStack™ platform during the normal course of business.
                                    
     
-                $optional_parameters = array(
-                "html_customer" => '',
-                 "html_brand" => '',
-                 "subject_customer" => '',
+                $clientParameters = array(
+                "default_notify_brand_email" => '',
                  "subject_brand" => '',
-                 "default_notify_brand_email" => '');
+                 "subject_customer" => '',
+                 "html_brand" => '',
+                 "html_customer" => '');
     
                     ****/
     
-                    public function createNotification($from_email,$default_notify_customer,$default_notify_brand,$notification_event,$optional_parameters = array()) {
+                    public function createNotification($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "from_email" => $from_email,
-                     "default_notify_customer" => $default_notify_customer,
-                     "default_notify_brand" => $default_notify_brand,
-                     "notification_event" => $notification_event		);
+            "from_email" => $clientParameters['from_email'],
+                     "default_notify_customer" => $clientParameters['default_notify_customer'],
+                     "default_notify_brand" => $clientParameters['default_notify_brand'],
+                     "notification_event" => $clientParameters['notification_event']		);
     
                     $http = $this->http('POST','Notification/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1187,23 +1191,23 @@ class api {
                       ::: Update an existing email notification template.
                                    
     
-                $optional_parameters = array(
-                "html_customer" => '',
-                 "html_brand" => '',
-                 "subject_customer" => '',
+                $clientParameters = array(
+                "default_notify_brand_email" => '',
                  "subject_brand" => '',
-                 "default_notify_brand_email" => '');
+                 "subject_customer" => '',
+                 "html_brand" => '',
+                 "html_customer" => '');
     
                     ****/
     
-                    public function updateNotification($from_email,$default_notify_customer,$default_notify_brand,$notification_id,$optional_parameters = array()) {
+                    public function updateNotification($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "from_email" => $from_email,
-                     "default_notify_customer" => $default_notify_customer,
-                     "default_notify_brand" => $default_notify_brand,
-                     "notification_id" => $notification_id		);
+            "from_email" => $clientParameters['from_email'],
+                     "default_notify_customer" => $clientParameters['default_notify_customer'],
+                     "default_notify_brand" => $clientParameters['default_notify_brand'],
+                     "notification_id" => $clientParameters['notification_id']		);
     
                     $http = $this->http('PATCH','Notification/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1222,7 +1226,7 @@ class api {
             
     
                 $req_parameters = array(
-            "notification_id" => $notification_id		);
+            "notification_id" => $clientParameters['notification_id']		);
     
                     $http = $this->http('DELETE','Notification/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1241,7 +1245,7 @@ class api {
             
     
                 $req_parameters = array(
-            "notification_id" => $notification_id		);
+            "notification_id" => $clientParameters['notification_id']		);
     
                     $http = $this->http('POST','Notification/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1254,12 +1258,12 @@ class api {
                       ::: List one or more offers connected to the brand.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "offer_id" => '');
     
                     ****/
     
-                    public function listOffer($optional_parameters = array()) {
+                    public function listOffer($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Offer/List',$req_parameters,$optional_parameters); 
@@ -1273,13 +1277,13 @@ class api {
                       ::: List all of your previously connected real-time payment gateways associated with the brand. This service will also list all payment gateways supported by RecurringStack™ along with their required credentials (leave 'gateway_id' parameter empty). 
                                    
     
-                $optional_parameters = array(
-                "gateway_provider" => '',
-                 "gateway_id" => '');
+                $clientParameters = array(
+                "gateway_id" => '',
+                 "gateway_provider" => '');
     
                     ****/
     
-                    public function listPayGateway($optional_parameters = array()) {
+                    public function listPayGateway($clientParameters = array()) {
             
     
                     $http = $this->http('GET','PayGateway/List',$req_parameters,$optional_parameters); 
@@ -1293,20 +1297,20 @@ class api {
                       ::: Create or link a new payment gateway to process real-time payments.
                                    
     
-                $optional_parameters = array(
-                "default_ba" => '',
+                $clientParameters = array(
+                "credentials_2" => '',
                  "default_cc" => '',
-                 "credentials_2" => '');
+                 "default_ba" => '');
     
                     ****/
     
-                    public function createPayGateway($credentials_1,$gateway_provider,$name,$optional_parameters = array()) {
+                    public function createPayGateway($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "credentials_1" => $credentials_1,
-                     "gateway_provider" => $gateway_provider,
-                     "name" => $name		);
+            "credentials_1" => $clientParameters['credentials_1'],
+                     "gateway_provider" => $clientParameters['gateway_provider'],
+                     "name" => $clientParameters['name']		);
     
                     $http = $this->http('POST','PayGateway/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1319,20 +1323,20 @@ class api {
                       ::: Update a previously linked payment gateway and/or set it as the brands default credit card or ACH real-time processing gateway. 
                                    
     
-                $optional_parameters = array(
-                "default_ba" => '',
+                $clientParameters = array(
+                "credentials_2" => '',
                  "default_cc" => '',
-                 "credentials_2" => '');
+                 "default_ba" => '');
     
                     ****/
     
-                    public function updatePayGateway($credentials_1,$name,$gateway_id,$optional_parameters = array()) {
+                    public function updatePayGateway($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "credentials_1" => $credentials_1,
-                     "name" => $name,
-                     "gateway_id" => $gateway_id		);
+            "credentials_1" => $clientParameters['credentials_1'],
+                     "name" => $clientParameters['name'],
+                     "gateway_id" => $clientParameters['gateway_id']		);
     
                     $http = $this->http('PATCH','PayGateway/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1351,7 +1355,7 @@ class api {
             
     
                 $req_parameters = array(
-            "gateway_id" => $gateway_id		);
+            "gateway_id" => $clientParameters['gateway_id']		);
     
                     $http = $this->http('DELETE','PayGateway/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1364,17 +1368,17 @@ class api {
                       ::: List payments connected to a customer account, invoice, or subscription.
                                    
     
-                $optional_parameters = array(
-                "payment_transaction_id" => '',
-                 "subscription_id" => '',
-                 "pay_method_id" => '',
-                 "customer_account_id" => '',
+                $clientParameters = array(
+                "payment_id" => '',
                  "invoice_id" => '',
-                 "payment_id" => '');
+                 "customer_account_id" => '',
+                 "pay_method_id" => '',
+                 "subscription_id" => '',
+                 "payment_transaction_id" => '');
     
                     ****/
     
-                    public function listPayment($optional_parameters = array()) {
+                    public function listPayment($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Payment/List',$req_parameters,$optional_parameters); 
@@ -1388,22 +1392,22 @@ class api {
                       ::: Post a payment to an existing invoice using a pay method on the customers account or using 'Cash' or other form of third party pay method.
                                    
     
-                $optional_parameters = array(
-                "payment_transaction_id" => '',
-                 "payment_gateway" => '',
+                $clientParameters = array(
+                "invoice_id" => '',
                  "pay_method_id" => '',
-                 "invoice_id" => '');
+                 "payment_gateway" => '',
+                 "payment_transaction_id" => '');
     
                     ****/
     
-                    public function createPayment($amount,$override_billing,$apply_to_prepaid_balance,$customer_account_id,$optional_parameters = array()) {
+                    public function createPayment($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "amount" => $amount,
-                     "override_billing" => $override_billing,
-                     "apply_to_prepaid_balance" => $apply_to_prepaid_balance,
-                     "customer_account_id" => $customer_account_id		);
+            "amount" => $clientParameters['amount'],
+                     "override_billing" => $clientParameters['override_billing'],
+                     "apply_to_prepaid_balance" => $clientParameters['apply_to_prepaid_balance'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','Payment/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1418,13 +1422,13 @@ class api {
     
                     ****/
     
-                    public function deletePayment($invoice_id,$customer_account_id,$payment_id) {
+                    public function deletePayment() {
             
     
                 $req_parameters = array(
-            "invoice_id" => $invoice_id,
-                     "customer_account_id" => $customer_account_id,
-                     "payment_id" => $payment_id		);
+            "invoice_id" => $clientParameters['invoice_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "payment_id" => $clientParameters['payment_id']		);
     
                     $http = $this->http('DELETE','Payment/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1437,13 +1441,13 @@ class api {
                       ::: Get a list or search for a specific payment method on a customer account. Max results 300.
                                    
     
-                $optional_parameters = array(
-                "customer_account_id" => '',
-                 "pay_method_id" => '');
+                $clientParameters = array(
+                "pay_method_id" => '',
+                 "customer_account_id" => '');
     
                     ****/
     
-                    public function listPayMethod($optional_parameters = array()) {
+                    public function listPayMethod($clientParameters = array()) {
             
     
                     $http = $this->http('GET','PayMethod/List',$req_parameters,$optional_parameters); 
@@ -1457,28 +1461,28 @@ class api {
                       ::: Add a new payment method (credit card or bank account) to a customer account. The payment information is attached to the customer account within the brand as opposed to any individual subscription itself.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "plaid_item_id" => '',
-                 "plaid_access_token" => '',
-                 "plaid_account_id" => '',
-                 "card_security_code" => '',
-                 "expiration_year" => '',
-                 "expiration_month" => '',
+                $clientParameters = array(
+                "routing_number" => '',
                  "account_type" => '',
-                 "routing_number" => '');
+                 "expiration_month" => '',
+                 "expiration_year" => '',
+                 "card_security_code" => '',
+                 "plaid_account_id" => '',
+                 "plaid_access_token" => '',
+                 "plaid_item_id" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function createPayMethod($require_verification,$account_number,$type,$customer_account_id,$optional_parameters = array()) {
+                    public function createPayMethod($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "require_verification" => $require_verification,
-                     "account_number" => $account_number,
-                     "type" => $type,
-                     "customer_account_id" => $customer_account_id		);
+            "require_verification" => $clientParameters['require_verification'],
+                     "account_number" => $clientParameters['account_number'],
+                     "type" => $clientParameters['type'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','PayMethod/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1491,17 +1495,17 @@ class api {
                       ::: Utilize this endpoint to verify a payment method.
                                    
     
-                $optional_parameters = array(
-                "force_verification" => '',
-                 "micro_charge_amount" => '');
+                $clientParameters = array(
+                "micro_charge_amount" => '',
+                 "force_verification" => '');
     
                     ****/
     
-                    public function verifyPayMethod($pay_method_id,$optional_parameters = array()) {
+                    public function verifyPayMethod($pay_method_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "pay_method_id" => $pay_method_id		);
+            "pay_method_id" => $clientParameters['pay_method_id']		);
     
                     $http = $this->http('POST','PayMethod/Verify',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1514,13 +1518,13 @@ class api {
                       ::: List the payment history for a specific payment method or account.
                                    
     
-                $optional_parameters = array(
-                "customer_account_id" => '',
-                 "pay_method_id" => '');
+                $clientParameters = array(
+                "pay_method_id" => '',
+                 "customer_account_id" => '');
     
                     ****/
     
-                    public function historyPayMethod($optional_parameters = array()) {
+                    public function historyPayMethod($clientParameters = array()) {
             
     
                     $http = $this->http('GET','PayMethod/History',$req_parameters,$optional_parameters); 
@@ -1540,7 +1544,7 @@ class api {
             
     
                 $req_parameters = array(
-            "pay_method_id" => $pay_method_id		);
+            "pay_method_id" => $clientParameters['pay_method_id']		);
     
                     $http = $this->http('DELETE','PayMethod/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1555,13 +1559,13 @@ class api {
     
                     ****/
     
-                    public function setDefaultPayMethod($type,$customer_account_id,$pay_method_id) {
+                    public function setDefaultPayMethod() {
             
     
                 $req_parameters = array(
-            "type" => $type,
-                     "customer_account_id" => $customer_account_id,
-                     "pay_method_id" => $pay_method_id		);
+            "type" => $clientParameters['type'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "pay_method_id" => $clientParameters['pay_method_id']		);
     
                     $http = $this->http('PATCH','PayMethod/SetDefault',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1574,15 +1578,15 @@ class api {
                       ::: Search products for a brand. Provide a 'product_id' to find a specific product (including a deleted one).
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
+                $clientParameters = array(
+                "product_id" => '',
                  "product_group_id" => '',
-                 "product_id" => '');
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function listProduct($optional_parameters = array()) {
+                    public function listProduct($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Product/List',$req_parameters,$optional_parameters); 
@@ -1596,29 +1600,29 @@ class api {
                       ::: Create a product.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "auto_pay_discount_amount" => '',
+                $clientParameters = array(
+                "trial_interval" => '',
                  "trial_price" => '',
-                 "trial_interval" => '');
+                 "auto_pay_discount_amount" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function createProduct($tax_exempt,$prompt_for_variables,$auto_pay_discount,$trial,$recurring_price,$setup_fee,$expiration_interval,$description,$name,$product_group_id,$optional_parameters = array()) {
+                    public function createProduct($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "tax_exempt" => $tax_exempt,
-                     "prompt_for_variables" => $prompt_for_variables,
-                     "auto_pay_discount" => $auto_pay_discount,
-                     "trial" => $trial,
-                     "recurring_price" => $recurring_price,
-                     "setup_fee" => $setup_fee,
-                     "expiration_interval" => $expiration_interval,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_group_id" => $product_group_id		);
+            "tax_exempt" => $clientParameters['tax_exempt'],
+                     "prompt_for_variables" => $clientParameters['prompt_for_variables'],
+                     "auto_pay_discount" => $clientParameters['auto_pay_discount'],
+                     "trial" => $clientParameters['trial'],
+                     "recurring_price" => $clientParameters['recurring_price'],
+                     "setup_fee" => $clientParameters['setup_fee'],
+                     "expiration_interval" => $clientParameters['expiration_interval'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('POST','Product/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1631,29 +1635,29 @@ class api {
                       ::: Update a product.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "auto_pay_discount_amount" => '',
+                $clientParameters = array(
+                "trial_interval" => '',
                  "trial_price" => '',
-                 "trial_interval" => '');
+                 "auto_pay_discount_amount" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function updateProduct($tax_exempt,$prompt_for_variables,$auto_pay_discount,$trial,$recurring_price,$setup_fee,$expiration_interval,$description,$name,$product_id,$optional_parameters = array()) {
+                    public function updateProduct($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "tax_exempt" => $tax_exempt,
-                     "prompt_for_variables" => $prompt_for_variables,
-                     "auto_pay_discount" => $auto_pay_discount,
-                     "trial" => $trial,
-                     "recurring_price" => $recurring_price,
-                     "setup_fee" => $setup_fee,
-                     "expiration_interval" => $expiration_interval,
-                     "description" => $description,
-                     "name" => $name,
-                     "product_id" => $product_id		);
+            "tax_exempt" => $clientParameters['tax_exempt'],
+                     "prompt_for_variables" => $clientParameters['prompt_for_variables'],
+                     "auto_pay_discount" => $clientParameters['auto_pay_discount'],
+                     "trial" => $clientParameters['trial'],
+                     "recurring_price" => $clientParameters['recurring_price'],
+                     "setup_fee" => $clientParameters['setup_fee'],
+                     "expiration_interval" => $clientParameters['expiration_interval'],
+                     "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name'],
+                     "product_id" => $clientParameters['product_id']		);
     
                     $http = $this->http('PATCH','Product/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1672,7 +1676,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_id" => $product_id		);
+            "product_id" => $clientParameters['product_id']		);
     
                     $http = $this->http('PATCH','Product/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1691,7 +1695,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_id" => $product_id		);
+            "product_id" => $clientParameters['product_id']		);
     
                     $http = $this->http('DELETE','Product/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1710,7 +1714,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_id" => $product_id		);
+            "product_id" => $clientParameters['product_id']		);
     
                     $http = $this->http('PATCH','Product/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1723,12 +1727,12 @@ class api {
                       ::: List product groups for a brand.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "product_group_id" => '');
     
                     ****/
     
-                    public function listProductGroup($optional_parameters = array()) {
+                    public function listProductGroup($clientParameters = array()) {
             
     
                     $http = $this->http('GET','ProductGroup/List',$req_parameters,$optional_parameters); 
@@ -1742,27 +1746,27 @@ class api {
                       ::: Create and associate a new product group for a brand.
                                    
     
-                $optional_parameters = array(
-                "VAR10" => '',
-                 "VAR9" => '',
-                 "VAR8" => '',
-                 "VAR7" => '',
-                 "VAR6" => '',
-                 "VAR5" => '',
-                 "VAR4" => '',
-                 "VAR3" => '',
-                 "VAR2" => '',
+                $clientParameters = array(
+                "action_url" => '',
                  "VAR1" => '',
-                 "action_url" => '');
+                 "VAR2" => '',
+                 "VAR3" => '',
+                 "VAR4" => '',
+                 "VAR5" => '',
+                 "VAR6" => '',
+                 "VAR7" => '',
+                 "VAR8" => '',
+                 "VAR9" => '',
+                 "VAR10" => '');
     
                     ****/
     
-                    public function createProductGroup($description,$name,$optional_parameters = array()) {
+                    public function createProductGroup($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "description" => $description,
-                     "name" => $name		);
+            "description" => $clientParameters['description'],
+                     "name" => $clientParameters['name']		);
     
                     $http = $this->http('POST','ProductGroup/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1775,28 +1779,28 @@ class api {
                       ::: Update an existing product group.
                                    
     
-                $optional_parameters = array(
-                "VAR10" => '',
-                 "VAR9" => '',
-                 "VAR8" => '',
-                 "VAR7" => '',
-                 "VAR6" => '',
-                 "VAR5" => '',
-                 "VAR4" => '',
-                 "VAR3" => '',
-                 "VAR2" => '',
-                 "VAR1" => '',
-                 "action_url" => '',
+                $clientParameters = array(
+                "name" => '',
                  "description" => '',
-                 "name" => '');
+                 "action_url" => '',
+                 "VAR1" => '',
+                 "VAR2" => '',
+                 "VAR3" => '',
+                 "VAR4" => '',
+                 "VAR5" => '',
+                 "VAR6" => '',
+                 "VAR7" => '',
+                 "VAR8" => '',
+                 "VAR9" => '',
+                 "VAR10" => '');
     
                     ****/
     
-                    public function updateProductGroup($product_group_id,$optional_parameters = array()) {
+                    public function updateProductGroup($product_group_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "product_group_id" => $product_group_id		);
+            "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('PATCH','ProductGroup/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1815,7 +1819,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_group_id" => $product_group_id		);
+            "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('PATCH','ProductGroup/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1834,7 +1838,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_group_id" => $product_group_id		);
+            "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('DELETE','ProductGroup/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1853,7 +1857,7 @@ class api {
             
     
                 $req_parameters = array(
-            "product_group_id" => $product_group_id		);
+            "product_group_id" => $clientParameters['product_group_id']		);
     
                     $http = $this->http('PATCH','ProductGroup/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1872,7 +1876,7 @@ class api {
             
     
                 $req_parameters = array(
-            "reference_type" => $reference_type		);
+            "reference_type" => $clientParameters['reference_type']		);
     
                     $http = $this->http('GET','Reference/List',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1885,16 +1889,16 @@ class api {
                       ::: List existing subscriptions. Maximum resuts is 100 subscriptions.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "status" => '',
+                $clientParameters = array(
+                "subscription_id" => '',
                  "customer_account_id" => '',
-                 "subscription_id" => '');
+                 "status" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function listSubscription($optional_parameters = array()) {
+                    public function listSubscription($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Subscription/List',$req_parameters,$optional_parameters); 
@@ -1908,20 +1912,20 @@ class api {
                       ::: Estimate the cost of creating a new subscription for a customer. This endpoint allows you to calculate and optionally display the up-front and future cost of a subscription to a customer.
                                    
     
-                $optional_parameters = array(
-                "override_initial_billing" => '',
-                 "pay_method_id" => '',
+                $clientParameters = array(
+                "attached_components" => '',
                  "coupon_code" => '',
-                 "attached_components" => '');
+                 "pay_method_id" => '',
+                 "override_initial_billing" => '');
     
                     ****/
     
-                    public function estimateSubscription($product_id,$customer_account_id,$optional_parameters = array()) {
+                    public function estimateSubscription($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "product_id" => $product_id,
-                     "customer_account_id" => $customer_account_id		);
+            "product_id" => $clientParameters['product_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('GET','Subscription/Estimate',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1934,35 +1938,35 @@ class api {
                       ::: Create a new subscription for a customer. When creating a subscription, you must specify a product (product_id) and a customer (customer_account_id). One or more components can be attached to the subscription at the time of it's creation or you can attach components at any time in the future.
                                    
     
-                $optional_parameters = array(
-                "VAR10" => '',
-                 "VAR9" => '',
-                 "VAR8" => '',
-                 "VAR7" => '',
-                 "VAR6" => '',
-                 "VAR5" => '',
-                 "VAR4" => '',
-                 "VAR3" => '',
-                 "VAR2" => '',
-                 "VAR1" => '',
-                 "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "payment_transaction_id" => '',
-                 "payment_gateway" => '',
-                 "pay_method_id" => '',
+                $clientParameters = array(
+                "attached_components" => '',
                  "coupon_code" => '',
-                 "attached_components" => '');
+                 "pay_method_id" => '',
+                 "payment_gateway" => '',
+                 "payment_transaction_id" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '',
+                 "VAR1" => '',
+                 "VAR2" => '',
+                 "VAR3" => '',
+                 "VAR4" => '',
+                 "VAR5" => '',
+                 "VAR6" => '',
+                 "VAR7" => '',
+                 "VAR8" => '',
+                 "VAR9" => '',
+                 "VAR10" => '');
     
                     ****/
     
-                    public function createSubscription($auto_pay,$override_initial_billing,$product_id,$customer_account_id,$optional_parameters = array()) {
+                    public function createSubscription($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "auto_pay" => $auto_pay,
-                     "override_initial_billing" => $override_initial_billing,
-                     "product_id" => $product_id,
-                     "customer_account_id" => $customer_account_id		);
+            "auto_pay" => $clientParameters['auto_pay'],
+                     "override_initial_billing" => $clientParameters['override_initial_billing'],
+                     "product_id" => $clientParameters['product_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','Subscription/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -1975,34 +1979,34 @@ class api {
                       ::: Update an existing subscription.Changes made to a subscription will take effect immediately. If changes are made before the billing cycle renewal date the next payment will be calculated using the updated data (after the change), not the old data (before the change).
                                    
     
-                $optional_parameters = array(
-                "VAR10" => '',
-                 "VAR9" => '',
-                 "VAR8" => '',
-                 "VAR7" => '',
-                 "VAR6" => '',
-                 "VAR5" => '',
-                 "VAR4" => '',
-                 "VAR3" => '',
-                 "VAR2" => '',
-                 "VAR1" => '',
-                 "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "pay_method_id" => '',
-                 "renewal_date" => '',
-                 "payment_transaction_id" => '',
+                $clientParameters = array(
+                "attached_components" => '',
                  "coupon_code" => '',
-                 "attached_components" => '');
+                 "payment_transaction_id" => '',
+                 "renewal_date" => '',
+                 "pay_method_id" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '',
+                 "VAR1" => '',
+                 "VAR2" => '',
+                 "VAR3" => '',
+                 "VAR4" => '',
+                 "VAR5" => '',
+                 "VAR6" => '',
+                 "VAR7" => '',
+                 "VAR8" => '',
+                 "VAR9" => '',
+                 "VAR10" => '');
     
                     ****/
     
-                    public function updateSubscription($auto_pay,$customer_account_id,$subscription_id,$optional_parameters = array()) {
+                    public function updateSubscription($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "auto_pay" => $auto_pay,
-                     "customer_account_id" => $customer_account_id,
-                     "subscription_id" => $subscription_id		);
+            "auto_pay" => $clientParameters['auto_pay'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('POST','Subscription/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2015,19 +2019,19 @@ class api {
                       ::: Change the product associated with an existing subscription.
                                    
     
-                $optional_parameters = array(
-                "remove_coupons" => '',
-                 "remove_components" => '');
+                $clientParameters = array(
+                "remove_components" => '',
+                 "remove_coupons" => '');
     
                     ****/
     
-                    public function changeProductSubscription($product_id,$customer_account_id,$subscription_id,$optional_parameters = array()) {
+                    public function changeProductSubscription($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "product_id" => $product_id,
-                     "customer_account_id" => $customer_account_id,
-                     "subscription_id" => $subscription_id		);
+            "product_id" => $clientParameters['product_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('POST','Subscription/ChangeProduct',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2046,7 +2050,7 @@ class api {
             
     
                 $req_parameters = array(
-            "subscription_id" => $subscription_id		);
+            "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('PATCH','Subscription/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2065,7 +2069,7 @@ class api {
             
     
                 $req_parameters = array(
-            "subscription_id" => $subscription_id		);
+            "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('DELETE','Subscription/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2080,15 +2084,15 @@ class api {
     
                     ****/
     
-                    public function reportUsageSubscription($expression_type,$units,$component_id,$customer_account_id,$subscription_id) {
+                    public function reportUsageSubscription() {
             
     
                 $req_parameters = array(
-            "expression_type" => $expression_type,
-                     "units" => $units,
-                     "component_id" => $component_id,
-                     "customer_account_id" => $customer_account_id,
-                     "subscription_id" => $subscription_id		);
+            "expression_type" => $clientParameters['expression_type'],
+                     "units" => $clientParameters['units'],
+                     "component_id" => $clientParameters['component_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id'],
+                     "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('PATCH','Subscription/ReportUsage',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2107,7 +2111,7 @@ class api {
             
     
                 $req_parameters = array(
-            "subscription_id" => $subscription_id		);
+            "subscription_id" => $clientParameters['subscription_id']		);
     
                     $http = $this->http('PATCH','Subscription/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2120,20 +2124,20 @@ class api {
                       ::: List and search for one or multiple support tickets.
                                    
     
-                $optional_parameters = array(
-                "offset" => '',
-                 "order" => '',
-                 "limit" => '',
-                 "subscription_id" => '',
-                 "customer_account_id" => '',
-                 "working_status" => '',
-                 "direction" => '',
+                $clientParameters = array(
+                "ticket_id" => '',
                  "friendly_ticket_id" => '',
-                 "ticket_id" => '');
+                 "direction" => '',
+                 "working_status" => '',
+                 "customer_account_id" => '',
+                 "subscription_id" => '',
+                 "limit" => '',
+                 "order" => '',
+                 "offset" => '');
     
                     ****/
     
-                    public function listTicket($optional_parameters = array()) {
+                    public function listTicket($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Ticket/List',$req_parameters,$optional_parameters); 
@@ -2147,25 +2151,25 @@ class api {
                       ::: Create a new ticket or create a new message on an existing ticket.
                                    
     
-                $optional_parameters = array(
-                "guest_email" => '',
-                 "subscription_id" => '',
-                 "customer_user_id" => '',
-                 "customer_account_id" => '',
-                 "department" => '',
-                 "direction" => '',
-                 "subject" => '',
+                $clientParameters = array(
+                "ticket_id" => '',
                  "attachments" => '',
-                 "ticket_id" => '');
+                 "subject" => '',
+                 "direction" => '',
+                 "department" => '',
+                 "customer_account_id" => '',
+                 "customer_user_id" => '',
+                 "subscription_id" => '',
+                 "guest_email" => '');
     
                     ****/
     
-                    public function createTicket($message,$type,$optional_parameters = array()) {
+                    public function createTicket($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "message" => $message,
-                     "type" => $type		);
+            "message" => $clientParameters['message'],
+                     "type" => $clientParameters['type']		);
     
                     $http = $this->http('POST','Ticket/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2178,20 +2182,20 @@ class api {
                       ::: Update an existing ticket, including the ticket status.
                                    
     
-                $optional_parameters = array(
-                "subscription_id" => '',
-                 "customer_account_id" => '',
-                 "department" => '',
+                $clientParameters = array(
+                "subject" => '',
                  "working_status" => '',
-                 "subject" => '');
+                 "department" => '',
+                 "customer_account_id" => '',
+                 "subscription_id" => '');
     
                     ****/
     
-                    public function updateTicket($ticket_id,$optional_parameters = array()) {
+                    public function updateTicket($ticket_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "ticket_id" => $ticket_id		);
+            "ticket_id" => $clientParameters['ticket_id']		);
     
                     $http = $this->http('PATCH','Ticket/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2206,12 +2210,12 @@ class api {
     
                     ****/
     
-                    public function mergeTicket($merge_ticket_id,$ticket_id) {
+                    public function mergeTicket() {
             
     
                 $req_parameters = array(
-            "merge_ticket_id" => $merge_ticket_id,
-                     "ticket_id" => $ticket_id		);
+            "merge_ticket_id" => $clientParameters['merge_ticket_id'],
+                     "ticket_id" => $clientParameters['ticket_id']		);
     
                     $http = $this->http('PATCH','Ticket/Merge',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2230,7 +2234,7 @@ class api {
             
     
                 $req_parameters = array(
-            "ticket_id" => $ticket_id		);
+            "ticket_id" => $clientParameters['ticket_id']		);
     
                     $http = $this->http('DELETE','Ticket/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2243,19 +2247,19 @@ class api {
                       ::: All transactions (except 'List') are recorded in the transaction history. You can search the transaction history to find information on previous transactions.
                                    
     
-                $optional_parameters = array(
-                "ip_address" => '',
-                 "api_service" => '',
-                 "api_category" => '',
-                 "user_id" => '',
-                 "invoice_id" => '',
-                 "subscription_id" => '',
+                $clientParameters = array(
+                "transaction_id" => '',
                  "customer_account_id" => '',
-                 "transaction_id" => '');
+                 "subscription_id" => '',
+                 "invoice_id" => '',
+                 "user_id" => '',
+                 "api_category" => '',
+                 "api_service" => '',
+                 "ip_address" => '');
     
                     ****/
     
-                    public function listTransaction($optional_parameters = array()) {
+                    public function listTransaction($clientParameters = array()) {
             
     
                     $http = $this->http('GET','Transaction/List',$req_parameters,$optional_parameters); 
@@ -2269,17 +2273,17 @@ class api {
                       ::: List all users for a brand using the search criteria below. Max results 300.
                                    
     
-                $optional_parameters = array(
-                "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "username" => '',
-                 "email_address" => '',
+                $clientParameters = array(
+                "user_id" => '',
                  "customer_account_id" => '',
-                 "user_id" => '');
+                 "email_address" => '',
+                 "username" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '');
     
                     ****/
     
-                    public function listUser($optional_parameters = array()) {
+                    public function listUser($clientParameters = array()) {
             
     
                     $http = $this->http('GET','User/List',$req_parameters,$optional_parameters); 
@@ -2293,28 +2297,28 @@ class api {
                       ::: Create a new user connected to a customer account.
                                    
     
-                $optional_parameters = array(
-                "avatar_uri" => '',
-                 "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "access_level" => '',
-                 "password" => '',
+                $clientParameters = array(
+                "phone_number_country_code" => '',
                  "phone_number" => '',
-                 "phone_number_country_code" => '');
+                 "password" => '',
+                 "access_level" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '',
+                 "avatar_uri" => '');
     
                     ****/
     
-                    public function createUser($send_new_user_email,$timezone_id,$locale,$email_address,$last_name,$first_name,$customer_account_id,$optional_parameters = array()) {
+                    public function createUser($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "send_new_user_email" => $send_new_user_email,
-                     "timezone_id" => $timezone_id,
-                     "locale" => $locale,
-                     "email_address" => $email_address,
-                     "last_name" => $last_name,
-                     "first_name" => $first_name,
-                     "customer_account_id" => $customer_account_id		);
+            "send_new_user_email" => $clientParameters['send_new_user_email'],
+                     "timezone_id" => $clientParameters['timezone_id'],
+                     "locale" => $clientParameters['locale'],
+                     "email_address" => $clientParameters['email_address'],
+                     "last_name" => $clientParameters['last_name'],
+                     "first_name" => $clientParameters['first_name'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','User/Create',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2327,28 +2331,28 @@ class api {
                       ::: Update an existing user profile. Only provide the parameters you wish to update.
                                    
     
-                $optional_parameters = array(
-                "verified" => '',
-                 "timezone_id" => '',
-                 "locale" => '',
-                 "avatar_uri" => '',
-                 "custom_field_2" => '',
-                 "custom_field_1" => '',
-                 "access_level" => '',
-                 "password" => '',
-                 "phone_number" => '',
-                 "phone_number_country_code" => '',
-                 "email_address" => '',
+                $clientParameters = array(
+                "first_name" => '',
                  "last_name" => '',
-                 "first_name" => '');
+                 "email_address" => '',
+                 "phone_number_country_code" => '',
+                 "phone_number" => '',
+                 "password" => '',
+                 "access_level" => '',
+                 "custom_field_1" => '',
+                 "custom_field_2" => '',
+                 "avatar_uri" => '',
+                 "locale" => '',
+                 "timezone_id" => '',
+                 "verified" => '');
     
                     ****/
     
-                    public function updateUser($user_id,$optional_parameters = array()) {
+                    public function updateUser($user_id,$clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "user_id" => $user_id		);
+            "user_id" => $clientParameters['user_id']		);
     
                     $http = $this->http('PATCH','User/Update',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2367,7 +2371,7 @@ class api {
             
     
                 $req_parameters = array(
-            "user_id" => $user_id		);
+            "user_id" => $clientParameters['user_id']		);
     
                     $http = $this->http('PATCH','User/Suspend',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2386,7 +2390,7 @@ class api {
             
     
                 $req_parameters = array(
-            "user_id" => $user_id		);
+            "user_id" => $clientParameters['user_id']		);
     
                     $http = $this->http('PATCH','User/Delete',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2405,7 +2409,7 @@ class api {
             
     
                 $req_parameters = array(
-            "user_id" => $user_id		);
+            "user_id" => $clientParameters['user_id']		);
     
                     $http = $this->http('PATCH','User/Restore',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2418,18 +2422,18 @@ class api {
                       ::: Authenticate a user as part of a sign in process.
                                    
     
-                $optional_parameters = array(
-                "temporary_token" => '',
-                 "url" => '',
-                 "ip_address" => '',
-                 "override_password_requirement" => '',
-                 "password" => '',
+                $clientParameters = array(
+                "email_address" => '',
                  "username" => '',
-                 "email_address" => '');
+                 "password" => '',
+                 "override_password_requirement" => '',
+                 "ip_address" => '',
+                 "url" => '',
+                 "temporary_token" => '');
     
                     ****/
     
-                    public function authenticateUser($optional_parameters = array()) {
+                    public function authenticateUser($clientParameters = array()) {
             
     
                     $http = $this->http('POST','User/Authenticate',$req_parameters,$optional_parameters); 
@@ -2445,12 +2449,12 @@ class api {
     
                     ****/
     
-                    public function _2FARequestUser($verification_method,$verification_user_id) {
+                    public function _2FARequestUser() {
             
     
                 $req_parameters = array(
-            "verification_method" => $verification_method,
-                     "verification_user_id" => $verification_user_id		);
+            "verification_method" => $clientParameters['verification_method'],
+                     "verification_user_id" => $clientParameters['verification_user_id']		);
     
                     $http = $this->http('POST','User/2FARequest',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2463,18 +2467,18 @@ class api {
                       ::: Verify a users identity; email address; or phone number using the verification code sent via the 'User/2FARequest' notification. If verification is successful the users details will be returned with the 'authenticated' namespace set to 'Y'.
                                    
     
-                $optional_parameters = array(
+                $clientParameters = array(
                 "force_verification" => '');
     
                     ****/
     
-                    public function _2FAVerifyUser($verification_method,$verification_code,$verification_user_id,$optional_parameters = array()) {
+                    public function _2FAVerifyUser($clientParameters = array()) {
             
     
                 $req_parameters = array(
-            "verification_method" => $verification_method,
-                     "verification_code" => $verification_code,
-                     "verification_user_id" => $verification_user_id		);
+            "verification_method" => $clientParameters['verification_method'],
+                     "verification_code" => $clientParameters['verification_code'],
+                     "verification_user_id" => $clientParameters['verification_user_id']		);
     
                     $http = $this->http('POST','User/2FAVerify',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2487,13 +2491,13 @@ class api {
                       ::: This service will send a temporary password good for one hour to the users e-mail address.
                                    
     
-                $optional_parameters = array(
-                "username" => '',
-                 "email_address" => '');
+                $clientParameters = array(
+                "email_address" => '',
+                 "username" => '');
     
                     ****/
     
-                    public function passwdResetUser($optional_parameters = array()) {
+                    public function passwdResetUser($clientParameters = array()) {
             
     
                     $http = $this->http('POST','User/PasswdReset',$req_parameters,$optional_parameters); 
@@ -2509,12 +2513,12 @@ class api {
     
                     ****/
     
-                    public function createLoginLinkUser($user_id,$customer_account_id) {
+                    public function createLoginLinkUser() {
             
     
                 $req_parameters = array(
-            "user_id" => $user_id,
-                     "customer_account_id" => $customer_account_id		);
+            "user_id" => $clientParameters['user_id'],
+                     "customer_account_id" => $clientParameters['customer_account_id']		);
     
                     $http = $this->http('POST','User/CreateLoginLink',$req_parameters,$optional_parameters); 
                         return $http;
@@ -2529,20 +2533,19 @@ class api {
     
                     ****/
     
-                    public function oAuthAuthenticateUser($create_if_not_exists,$failure_uri,$redirect_uri,$identity_service) {
+                    public function oAuthAuthenticateUser() {
             
     
                 $req_parameters = array(
-            "create_if_not_exists" => $create_if_not_exists,
-                     "failure_uri" => $failure_uri,
-                     "redirect_uri" => $redirect_uri,
-                     "identity_service" => $identity_service		);
+            "create_if_not_exists" => $clientParameters['create_if_not_exists'],
+                     "failure_uri" => $clientParameters['failure_uri'],
+                     "redirect_uri" => $clientParameters['redirect_uri'],
+                     "identity_service" => $clientParameters['identity_service']		);
     
                     $http = $this->http('POST','User/OAuthAuthenticate',$req_parameters,$optional_parameters); 
                         return $http;
                     }
     
-
 
 //http
 private function http ($http_method,$api_service,$req_parameters,$optional_parameters) { 
@@ -2567,7 +2570,7 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     };
 
     //Check for a successful header
-    if ($response->getStatusCode() != '200') { throw new Exception("http error : Code " . $response->getStatusCode()); };
+    if ($response->getStatusCode() != '200') { throw new apiException("http error : Code " . $response->getStatusCode()); };
 
     //if ($this->)
     //return $response->getBody()->getContents();
@@ -2575,7 +2578,7 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     //Decode and check for errors
     if ($this->response_format == 'json') {
         $decoded = json_decode($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new Exception($decoded->exception); };
+        if ($decoded->exception != '') { throw new apiException($decoded->exception); };
     }
 
     if ($this->response_format == 'xml') {
@@ -2596,10 +2599,10 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
 
 
 private function checkConfiguration() { 
-    if ($this->response_format == 'xml' || $this->response_format == 'json') { }else{ throw new Exception("'response_format' must be with xml or json"); }
-    if ($this->response_type == '' || $this->response_type == 'clean') { }else{ throw new Exception("'response_type' must be empty or 'clean'."); }
-    if ($this->user_key == '') { throw new Exception("'user_key' is required."); };
-    if ($this->brand_id == '') { throw new Exception("Please specify a brand to work with using 'brand_id'.");  };       
+    if ($this->response_format == 'xml' || $this->response_format == 'json') { }else{ throw new apiException("'response_format' must be with xml or json",400); }
+    if ($this->response_type == '' || $this->response_type == 'clean') { }else{ throw new apiException("'response_type' must be empty or 'clean'.",400); }
+    if ($this->user_key == '') { throw new apiException("'user_key' is required.",401); };
+    if ($this->brand_id == '') { throw new apiException("Please specify a brand to work with using 'brand_id'.",401);  };       
 }
 
 }
