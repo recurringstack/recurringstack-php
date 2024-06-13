@@ -905,8 +905,7 @@ class api {
                         $clientParameters = array(
                         "attached_items" => '',
                          "custom_field_1" => '',
-                         "custom_field_2" => '',
-                         "auto_subscription_id" => '');
+                         "custom_field_2" => '');
             
                             ****/
             
