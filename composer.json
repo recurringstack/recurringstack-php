@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "recurringstack\\apiclient\\": "src/lib/"
+            "recurringstack\\api\\": "src/lib/"
         }
     },
     "authors": [
