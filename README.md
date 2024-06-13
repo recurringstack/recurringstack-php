@@ -1,4 +1,4 @@
-![Alt text](images/recurring_stack_logo-whitebg.png?raw=true "Title")
+![Alt text](images/recurring_stack_logo-whitebg.png?raw=true "RecurringStack")
 
 # recurringstack-php
 This repository houses the official php client for the RecurringStack™ API. Create and manage account, subscriptions, products, support tickets, and more.
