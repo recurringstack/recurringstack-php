@@ -32,6 +32,26 @@ $rs = new recurringstack\api([
 ]);
 ```
 
+## Error Handling & Exceptions
+The RecurringStack™ API client includes custom error handling methods.
+```php
+try { 
+
+    # Delete a customer account
+    $rs->deleteAccount('8247cf79-9296-4372-b39c-6370c70372ee');
+
+} catch (recurringstack\apiException $e) { 
+
+    /* The following custom error handling functions are available /*
+
+    $debug = debugError(); //Return the exception message, code, request, and the response as an object. Great for debugging!
+    $errorObj = $e->errorAsObject(); //Return the code and message in an object
+    $errorMesage = getExceptionMessage(); //Return just the message
+    $errorCode = getExceptionCode(); //Return just the code
+
+    }
+```
+
 ## Usage Examples
 
 ```php

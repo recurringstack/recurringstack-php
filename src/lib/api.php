@@ -2566,8 +2566,9 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
       $response = $guzzle_http_client->request($http_method,$api_service,$formatted_params); 
     };
 
+
     //Check for a successful header
-    if ($response->getStatusCode() != '200') { throw new apiException("http error",strval($response->getStatusCode())); };
+    if ($response->getStatusCode() != '200') { throw new apiException("http error",strval($response->getStatusCode()),$response->getStatusCode(),$formatted_params,strval($response->getBody()->getContents())); };
 
     //if ($this->)
     //return $response->getBody()->getContents();
@@ -2575,19 +2576,19 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     //Decode and check for errors
     if ($this->response_format == 'json') {
         $decoded = json_decode($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code)); }; //Catch exception on Json
+        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code),$response->getStatusCode(),$formatted_params,strval($response->getBody()->getContents())); }; //Catch exception on Json
     }
 
     if ($this->response_format == 'xml') {
         libxml_use_internal_errors(true);
         $decoded = simplexml_load_string($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code)); }; //Catch exception on XML
+        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code),$response->getStatusCode(),$formatted_params,strval($response->getBody()->getContents())); }; //Catch exception on XML
     if (false === $decoded) {
         foreach(libxml_get_errors() as $error) {
             $xml_errors_pre = "\t" . $error->message;
             $xml_errors = $xml_errors_pre . $xml_errors;
         }
-            throw new apiException(strval($decoded->exception),strval($response->getStatusCode())); //XML Decoding Error
+            throw new apiException(strval($decoded->exception),strval($response->getStatusCode()),$response->getStatusCode(),$formatted_params,strval($response->getBody()->getContents())); //XML Decoding Error
         }    
     }
 
@@ -2598,10 +2599,10 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
 
 
 private function checkConfiguration() { 
-    if ($this->response_format == 'xml' || $this->response_format == 'json') { }else{ throw new apiException("'response_format' must be with xml or json",400); }
-    if ($this->response_type == '' || $this->response_type == 'clean') { }else{ throw new apiException("'response_type' must be empty or 'clean'.",400); }
-    if ($this->user_key == '') { throw new apiException("'user_key' is required.",401); };
-    if ($this->brand_id == '') { throw new apiException("Please specify a brand to work with using 'brand_id'.",401);  };       
+    if ($this->response_format == 'xml' || $this->response_format == 'json') { }else{ throw new apiException("'response_format' must be with xml or json",400,'','',''); }
+    if ($this->response_type == '' || $this->response_type == 'clean') { }else{ throw new apiException("'response_type' must be empty or 'clean'.",400,'','',''); }
+    if ($this->user_key == '') { throw new apiException("'user_key' is required.",401,'','',''); };
+    if ($this->brand_id == '') { throw new apiException("Please specify a brand to work with using 'brand_id'.",401,'','','');  };       
 }
 
 }
