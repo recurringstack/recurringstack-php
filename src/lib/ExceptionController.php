@@ -4,11 +4,11 @@ namespace recurringstack;
 class apiException extends \Exception
 {
     // Redefine the exception so message isn't optional
-    public function __construct($message, $code = 0, Throwable $previous = null) {
+    public function __construct($message, $code = 0) {
         // some code
 
         // make sure everything is assigned properly
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code);
     }
 
     // custom string representation of object
@@ -16,8 +16,14 @@ class apiException extends \Exception
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 
-
     public function customFunction() {
-        echo "A custom function for this type of exception\n";
+
+        if ($code != '0') {
+            http_response_code($code): 
+            throw new Exception($message);
+        }else{  
+            throw new Exception($message);
+        }
+
     }
 }

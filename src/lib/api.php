@@ -1961,13 +1961,13 @@ class api {
                     
             
                         $req_parameters = array(
-                    "auto_pay" => $clientParameters['auto_pay'],
+                            "auto_pay" => $clientParameters['auto_pay'],
                              "override_initial_billing" => $clientParameters['override_initial_billing'],
                              "product_id" => $clientParameters['product_id'],
                              "customer_account_id" => $clientParameters['customer_account_id']		);
                             
                             $http = $this->http('POST','Subscription/Create',$req_parameters,$clientParameters); 
-                                return $http;
+                            return $http;
                             }
             
                             /****
@@ -2567,7 +2567,7 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     };
 
     //Check for a successful header
-    if ($response->getStatusCode() != '200') { throw new apiException("http error : Code " . $response->getStatusCode()); };
+    if ($response->getStatusCode() != '200') { throw new apiException("http error",$response->getStatusCode()); };
 
     //if ($this->)
     //return $response->getBody()->getContents();
@@ -2575,21 +2575,23 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     //Decode and check for errors
     if ($this->response_format == 'json') {
         $decoded = json_decode($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new apiException($decoded->exception); };
+        if ($decoded->exception != '') { throw new apiException($decoded->exception,$decoded->exception->attributes()->code); }; //Catch exception on Json
     }
 
     if ($this->response_format == 'xml') {
         libxml_use_internal_errors(true);
         $decoded = simplexml_load_string($response->getBody()->getContents());
+        if ($decoded->exception != '') { throw new apiException($decoded->exception,$decoded->exception->attributes()->code); }; //Catch exception on XML
     if (false === $decoded) {
         foreach(libxml_get_errors() as $error) {
             $xml_errors_pre = "\t" . $error->message;
             $xml_errors = $xml_errors_pre . $xml_errors;
         }
+            throw new apiException($decoded->exception,$response->getStatusCode()); //XML Decoding Error
         }    
     }
 
-    //Decoded
+    //Return specified format
     if ($this->response_type != 'clean') { return $response->getBody()->getContents();  }else{ return $decoded;  };
 
 }
