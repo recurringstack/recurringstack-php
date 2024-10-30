@@ -16,14 +16,17 @@ class apiException extends \Exception
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 
+    //Customize this section to your liking, add custom error handling as you see fit.
     public function customFunction() {
 
         if ($code != '0') {
-            http_response_code($code);
-            throw new Exception($message);
+            $error_array = array("code" => $code,"message" => $message);
         }else{  
-            throw new Exception($message);
+            http_response_code($code);
+            $error_array = array("code" => $code,"message" => $message);
         }
+
+        throw new Exception($error_array);
 
     }
 }
