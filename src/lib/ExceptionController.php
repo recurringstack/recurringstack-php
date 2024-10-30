@@ -19,7 +19,7 @@ class apiException extends \Exception
     public function customFunction() {
 
         if ($code != '0') {
-            http_response_code($code): 
+            http_response_code($code);
             throw new Exception($message);
         }else{  
             throw new Exception($message);
