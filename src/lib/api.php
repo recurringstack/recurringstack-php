@@ -2567,7 +2567,7 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     };
 
     //Check for a successful header
-    if ($response->getStatusCode() != '200') { throw new apiException("http error",$response->getStatusCode()); };
+    if ($response->getStatusCode() != '200') { throw new apiException("http error",strval($response->getStatusCode())); };
 
     //if ($this->)
     //return $response->getBody()->getContents();
@@ -2575,19 +2575,19 @@ private function http ($http_method,$api_service,$req_parameters,$optional_param
     //Decode and check for errors
     if ($this->response_format == 'json') {
         $decoded = json_decode($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new apiException($decoded->exception,$decoded->exception->attributes()->code); }; //Catch exception on Json
+        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code)); }; //Catch exception on Json
     }
 
     if ($this->response_format == 'xml') {
         libxml_use_internal_errors(true);
         $decoded = simplexml_load_string($response->getBody()->getContents());
-        if ($decoded->exception != '') { throw new apiException($decoded->exception,$decoded->exception->attributes()->code); }; //Catch exception on XML
+        if ($decoded->exception != '') { throw new apiException(strval($decoded->exception),strval($decoded->exception->attributes()->code)); }; //Catch exception on XML
     if (false === $decoded) {
         foreach(libxml_get_errors() as $error) {
             $xml_errors_pre = "\t" . $error->message;
             $xml_errors = $xml_errors_pre . $xml_errors;
         }
-            throw new apiException($decoded->exception,$response->getStatusCode()); //XML Decoding Error
+            throw new apiException(strval($decoded->exception),strval($response->getStatusCode())); //XML Decoding Error
         }    
     }
 
