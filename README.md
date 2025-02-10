@@ -46,8 +46,9 @@ try {
 
     $debug = debugError(); //Return the exception message, code, request, and the response as an object. Great for debugging!
     $errorObj = $e->errorAsObject(); //Return the code and message in an object
-    $errorMesage = getExceptionMessage(); //Return just the message
-    $errorCode = getExceptionCode(); //Return just the code
+    $errorMessage = getExceptionMessage(); //Return just the message
+    $errorCode = getExceptionCode(); //Return just the status code
+    */
 
     }
 ```
@@ -68,6 +69,10 @@ $subConfig = array(
   "customer_account_id" => '8247cf79-9296-4372-b39c-6370c70372ee',
   "product_id" => "",
   "auto_pay" => "",
+  "coupon_code" => '',
+  "custom_field_1" => '',
+  "custom_field_2" => '',
+  "attached_components" => '',  
   "override_initial_billing" => ""
 );
 
@@ -75,8 +80,13 @@ $rs->createSubscription($subConfig);
 ```
 ```php
 # Manually create an invoice for a customer
+$billableItems = array(
+  array('item_name' => 'Programming Services Base Charge','item_price' => '25.00','tax_exempt' => 'Y'),
+  array('item_name' => '25 Hours @ $15.00 Ea','item_price' => '375.00','tax_exempt' => 'Y'),
+);
+
 $invoiceConfig = array(
- "attached_items" => '[{"item_name":"Programming Services Base Charge","item_price":"25.00","tax_exempt":"N"},{"item_name":"25 Hours of Programming","item_price":"250.00","tax_exempt":"Y"}]',
+ "attached_items" => json_encode($billableItems),
  "custom_field_1" => '',
  "custom_field_2" => ''
 );
@@ -84,7 +94,10 @@ $invoiceConfig = array(
 $rs->createInvoice($invoiceConfig);
 ```
 
-NOTE: We recommend wrapping your code in a try block as all errors returned locally or from the API will be returned as exceptions
+NOTES: 
+
+* We recommend wrapping your code in a try block as all errors returned locally or from the API will be returned as exceptions
+* Find more example code in the official RecurringStack™ documentation at https://recurringstack.com/docs/api
 
 ## Contributing
 
