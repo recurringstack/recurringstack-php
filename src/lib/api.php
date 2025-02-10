@@ -2086,21 +2086,30 @@ private function http ($http_method,$api_service,$params) {
 
         $response = $guzzle_http_client->request($http_method,$api_service,$formatted_params); 
 
-        } catch (\GuzzleHttp\Exception\ConnectException $e) {
-            throw new apiException("Connection Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            throw new apiException("Request Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
-            throw new apiException("Server Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            throw new apiException("Client Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\GuzzleHttp\Exception\TransferException $e) {
-            throw new apiException("Transfer Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            throw new apiException("Guzzle Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        } catch (\Exception $e) {
-            throw new apiException("Unknown Error : " . $e->getMessage(),'0', "500",$formatted_params,'');
-        }
+            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Connection Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\GuzzleHttp\Exception\RequestException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Request Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\GuzzleHttp\Exception\ServerException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Server Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\GuzzleHttp\Exception\ClientException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Client Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\GuzzleHttp\Exception\TransferException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Transfer Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Guzzle Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            } catch (\Exception $e) {
+                $sanitizedParams = $this->sanitizeParams($formatted_params);
+                throw new apiException("Unknown Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+            }
+
+
     };
 
 
@@ -2134,6 +2143,15 @@ private function http ($http_method,$api_service,$params) {
 
 }
 
+    // Removes your the authorization credentials from the URL.
+    private function sanitizeParams($params) {
+        if (isset($params['query'])) {
+            unset($params['query']['key']);
+            unset($params['query']['user_key']);
+            unset($params['query']['brand_id']);
+        }
+        return $params;
+    }
 
 }
 ?>
