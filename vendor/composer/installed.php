@@ -1,171 +1,90 @@
 <?php return array(
     'root' => array(
-        'name' => 'recurringstack/client',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'name' => 'recurringstack/recurringstack-php',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '9a269ec8871e075a155efacec2d6bc1bc6ad46aa',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'guzzle/batch' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/cache' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/common' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/guzzle' => array(
-            'pretty_version' => 'v3.9.3',
-            'version' => '3.9.3.0',
-            'reference' => '0645b70d953bc1c067bbc8d5bc53194706b628d9',
+        'guzzlehttp/guzzle' => array(
+            'pretty_version' => '6.5.8',
+            'version' => '6.5.8.0',
+            'reference' => 'a52f0440530b54fa079ce76e8c5d196a42cad981',
             'type' => 'library',
-            'install_path' => __DIR__ . '/../guzzle/guzzle',
+            'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'guzzle/http' => array(
+        'guzzlehttp/promises' => array(
+            'pretty_version' => '1.5.3',
+            'version' => '1.5.3.0',
+            'reference' => '67ab6e18aaa14d753cc148911d273f6e6cb6721e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../guzzlehttp/promises',
+            'aliases' => array(),
             'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
+        ),
+        'guzzlehttp/psr7' => array(
+            'pretty_version' => '1.9.1',
+            'version' => '1.9.1.0',
+            'reference' => 'e4490cabc77465aaee90b20cfc9a770f8c04be6b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../guzzlehttp/psr7',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'psr/http-message' => array(
+            'pretty_version' => '1.1',
+            'version' => '1.1.0.0',
+            'reference' => 'cb6ce4845ce34a8ad9e68117c10ee90a29919eba',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/http-message',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'psr/http-message-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0',
             ),
         ),
-        'guzzle/inflection' => array(
+        'ralouphie/getallheaders' => array(
+            'pretty_version' => '3.0.3',
+            'version' => '3.0.3.0',
+            'reference' => '120b605dfeb996808c31b6477290a714d356e822',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ralouphie/getallheaders',
+            'aliases' => array(),
             'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
         ),
-        'guzzle/iterator' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/log' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/parser' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-async' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-backoff' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-cache' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-cookie' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-curlauth' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-error-response' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-history' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-log' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-md5' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-mock' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/plugin-oauth' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/service' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'guzzle/stream' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => 'v3.9.3',
-            ),
-        ),
-        'recurringstack/client' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+        'recurringstack/recurringstack-php' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '9a269ec8871e075a155efacec2d6bc1bc6ad46aa',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'symfony/event-dispatcher' => array(
-            'pretty_version' => 'v2.8.52',
-            'version' => '2.8.52.0',
-            'reference' => 'a77e974a5fecb4398833b0709210e3d5e334ffb0',
+        'symfony/polyfill-intl-idn' => array(
+            'pretty_version' => 'v1.32.0',
+            'version' => '1.32.0.0',
+            'reference' => '9614ac4d8061dc257ecc64cba1b140873dce8ad3',
             'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/event-dispatcher',
+            'install_path' => __DIR__ . '/../symfony/polyfill-intl-idn',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/polyfill-intl-normalizer' => array(
+            'pretty_version' => 'v1.32.0',
+            'version' => '1.32.0.0',
+            'reference' => '3833d7255cc303546435cb650316bff708a1c75c',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-intl-normalizer',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

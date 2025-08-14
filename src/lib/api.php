@@ -2067,12 +2067,6 @@ public function listTransaction($parameters = array()) { return $this->http('GET
 //http - Sends the request to RecurringStack™
 private function http ($http_method,$api_service,$params) { 
 
-    //Setup authentication parameters
-    $auth = array('key' => $this->key,'brand_id' => $this->brand_id,'user_key' => $this->user_key);
-    
-    //Set the parameters to send to RecurringStack
-    if (is_array($params)) { $params = array_merge($auth,$params); }else{ $params = $auth; }
-
     //Initiate Guzzle
     $guzzle_http_client = new \GuzzleHttp\Client(['base_uri' => 'https://api.recurringstack.com/' . $this->response_format . '/','timeout' => 10.0]);
 
@@ -2080,35 +2074,41 @@ private function http ($http_method,$api_service,$params) {
     //Send Request
     if ($http_method != '') { 
 
-      $formatted_params = ['query' => $params];
+        $formatted_params = [
+            'query' => $params,
+            'headers' => [
+                'X-Api-Key'  => $this->key,
+                'X-User-Key' => $this->user_key,
+                'X-Brand-Id' => $this->brand_id,
+            ]
+        ];
 
-      try {
+        try {
 
         $response = $guzzle_http_client->request($http_method,$api_service,$formatted_params); 
 
             } catch (\GuzzleHttp\Exception\ConnectException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Connection Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Connection Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\GuzzleHttp\Exception\RequestException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Request Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Request Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\GuzzleHttp\Exception\ServerException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Server Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Server Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Client Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Client Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\GuzzleHttp\Exception\TransferException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Transfer Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Transfer Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Guzzle Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Guzzle Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             } catch (\Exception $e) {
-                $sanitizedParams = $this->sanitizeParams($formatted_params);
-                throw new apiException("Unknown Error : " . $e->getMessage(), '0', "500", $sanitizedParams, '');
+                $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+                throw new apiException("Unknown Error : " . $sanitizedMessage, '500', "500", $formatted_params, '');
             }
-
 
     };
 
@@ -2143,14 +2143,11 @@ private function http ($http_method,$api_service,$params) {
 
 }
 
-    // Removes your the authorization credentials from the URL.
-    private function sanitizeParams($params) {
-        if (isset($params['query'])) {
-            unset($params['query']['key']);
-            unset($params['query']['user_key']);
-            unset($params['query']['brand_id']);
-        }
-        return $params;
+    // Removes sensitive information from the error message
+    private function sanitizeErrorMessage($message) {
+        // Regular expression to match and remove sensitive information
+        $pattern = '/(key|user_key|brand_id)=\w+/';
+        return preg_replace($pattern, '$1=****', $message);
     }
 
 }
