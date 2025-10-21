@@ -2074,14 +2074,18 @@ private function http ($http_method,$api_service,$params) {
     //Send Request
     if ($http_method != '') { 
 
-        $formatted_params = [
-            'query' => $params,
-            'headers' => [
-                'X-Api-Key'  => $this->key,
-                'X-User-Key' => $this->user_key,
-                'X-Brand-Id' => $this->brand_id,
+        $formatted_params = [ 'headers' => [
+            'X-Api-Key'  => $this->key,
+            'X-User-Key' => $this->user_key,
+            'X-Brand-Id' => $this->brand_id,
             ]
         ];
+
+        if (strtoupper($http_method) === 'GET') {
+            $formatted_params['query'] = $params;
+        } else {
+            $formatted_params['form_params'] = $params;
+        }
 
         try {
 
