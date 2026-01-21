@@ -1,6 +1,7 @@
 {
     "name": "recurringstack/recurringstack-php",
     "description": "This repository houses the official php client for the RecurringStack API. Official Release",
+    "version": "0.1.0",
     "type": "library",
     "license": "MIT",
     "autoload": {
