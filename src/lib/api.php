@@ -51,1195 +51,457 @@ class api {
 
         
 
-/* listBrand
 
-List all of the brands connected to your RecurringStack™ account. Depending on your subscription, one RecurringStack™ account can support up to ten different brands.
+/* listWebhook
 
-    * Optional Parameters:
-    * @param search_brand_id
-    * @param limit
-
-*/
-
-public function listBrand($parameters = array()) { return $this->http('GET','Brand/List', $parameters); }
-
-
-
-/* createBrand
-
-Create a new brand or company.
-
-    * Required Parameters:
-    * @param name
-    * @param description
-    * @param logo_url
+List webhook subscriptions
 
     * Optional Parameters:
-    * @param website_url
-    * @param website_login_url
-    * @param support_email
-    * @param support_link
-    * @param support_phone
-    * @param terms_url
-    * @param privacy_url
-    * @param social_media_facebook
-    * @param social_media_twitter
-    * @param social_media_youtube
-    * @param social_media_instagram
+    * @param webhook_id
+    * @param event_type
 
 */
 
-public function createBrand($parameters = array()) { return $this->http('POST','Brand/Create', $parameters); }
+public function listWebhook($parameters = array()) { return $this->http('GET','Webhook/List', $parameters); }
 
 
 
-/* updateBrand
+/* createWebhook
 
-Update an existing brand. Only pass the parameters you wish to update.
+Create a Webhook Subscription
 
     * Required Parameters:
-    * @param update_brand_id
+    * @param callback_url
 
     * Optional Parameters:
-    * @param name
-    * @param description
-    * @param logo_url
-    * @param website_url
-    * @param website_login_url
-    * @param support_email
-    * @param support_link
-    * @param support_phone
-    * @param terms_url
-    * @param privacy_url
-    * @param social_media_facebook
-    * @param social_media_twitter
-    * @param social_media_youtube
-    * @param social_media_instagram
+    * @param event_type
+    * @param secret
 
 */
 
-public function updateBrand($parameters = array()) { return $this->http('PATCH','Brand/Update', $parameters); }
+public function createWebhook($parameters = array()) { return $this->http('POST','Webhook/Create', $parameters); }
 
 
 
-/* deleteBrand
+/* updateWebhook
 
-Delete an existing brand. This operation is currently not reversable. If you have customers with subscriptions on the brand their subscriptions will no longer be billed and the brand_id can no longer be used for authentication with the API.
+Update a Webhook Subscription
 
     * Required Parameters:
-    * @param delete_brand_id
-
-*/
-
-public function deleteBrand($delete_brand_id) { return $this->http('DELETE', 'Brand/Delete', ['delete_brand_id' => $delete_brand_id]); }
-
-
-
-/* listKey
-
-List one or more API keys or search for API keys using one or more of the parameters.
+    * @param webhook_id
+    * @param callback_url
 
     * Optional Parameters:
-    * @param name
-    * @param connected_brand_id
+    * @param event_type
+    * @param secret
 
 */
 
-public function listKey($parameters = array()) { return $this->http('GET','Key/List', $parameters); }
+public function updateWebhook($parameters = array()) { return $this->http('PATCH','Webhook/Update', $parameters); }
 
 
 
-/* createKey
+/* deleteWebhook
 
-Create a new API key and associate it with one or more brands.
+Delete a Webhook Subscription
 
     * Required Parameters:
-    * @param name
-    * @param brands
+    * @param webhook_id
 
 */
 
-public function createKey($parameters = array()) { return $this->http('POST','Key/Create', $parameters); }
+public function deleteWebhook($webhook_id) { return $this->http('DELETE', 'Webhook/Delete', ['webhook_id' => $webhook_id]); }
 
 
 
-/* updateKey
+/* listTransaction
 
-You can utilize this service to update the name or brands associated with an API key.
-
-    * Required Parameters:
-    * @param api_key_id
-    * @param name
-    * @param brands
-
-*/
-
-public function updateKey($parameters = array()) { return $this->http('PATCH','Key/Update', $parameters); }
-
-
-
-/* deleteKey
-
-Use this service to delete an existing API key.
-
-    * Required Parameters:
-    * @param api_key_id
-
-*/
-
-public function deleteKey($api_key_id) { return $this->http('DELETE', 'Key/Delete', ['api_key_id' => $api_key_id]); }
-
-
-
-/* restoreKey
-
-Restore a previously deleted API key.
-
-    * Required Parameters:
-    * @param api_key_id
-
-*/
-
-public function restoreKey($api_key_id) { return $this->http('PATCH', 'Key/Restore', ['api_key_id' => $api_key_id]); }
-
-
-
-/* listIAMPolicy
-
-List one or more Identity and Access Management (IAM) policies.
+All transactions (except 'List') are recorded in the transaction history. You can search the transaction history to find information on previous transactions.
 
     * Optional Parameters:
-    * @param IAM_policy_id
-
-*/
-
-public function listIAMPolicy($parameters = array()) { return $this->http('GET','IAMPolicy/List', $parameters); }
-
-
-
-/* createIAMPolicy
-
-Create a new IAM Policy
-
-    * Required Parameters:
-    * @param name
-    * @param description
-
-*/
-
-public function createIAMPolicy($parameters = array()) { return $this->http('POST','IAMPolicy/Create', $parameters); }
-
-
-
-/* updateIAMPolicy
-
-Update an existing IAM Policy
-
-    * Required Parameters:
-    * @param IAM_policy_id
-
-*/
-
-public function updateIAMPolicy($IAM_policy_id) { return $this->http('PATCH', 'IAMPolicy/Update', ['IAM_policy_id' => $IAM_policy_id]); }
-
-
-
-/* deleteIAMPolicy
-
-Delete an existing IAM Policy
-
-    * Required Parameters:
-    * @param IAM_policy_id
-
-*/
-
-public function deleteIAMPolicy($IAM_policy_id) { return $this->http('DELETE', 'IAMPolicy/Delete', ['IAM_policy_id' => $IAM_policy_id]); }
-
-
-
-/* restoreIAMPolicy
-
-Restore a IAM Policy from deleted.
-
-    * Required Parameters:
-    * @param IAM_policy_id
-
-*/
-
-public function restoreIAMPolicy($IAM_policy_id) { return $this->http('PATCH', 'IAMPolicy/Restore', ['IAM_policy_id' => $IAM_policy_id]); }
-
-
-
-/* listAccount
-
-List all customer accounts connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 300.
-
-    * Optional Parameters:
+    * @param transaction_id
     * @param customer_account_id
-    * @param email_address
-    * @param first_name
-    * @param last_name
-    * @param company_name
-    * @param custom_field_1
-    * @param custom_field_2
-    * @param limit
-    * @param order
-    * @param offset
-
-*/
-
-public function listAccount($parameters = array()) { return $this->http('GET','Account/List', $parameters); }
-
-
-
-/* createAccount
-
-Create a new customer account and associate it with a brand. The initial user will be created based on the information and e-mail address provided.
-
-    * Required Parameters:
-    * @param first_name
-    * @param last_name
-    * @param email_address
-    * @param country
-    * @param locale
-    * @param timezone_id
-
-    * Optional Parameters:
-    * @param company_name
-    * @param cc_email_address
-    * @param phone_number_country_code
-    * @param phone_number
-    * @param address
-    * @param address_2
-    * @param unit
-    * @param unit_type
-    * @param city
-    * @param state
-    * @param zip_code
-    * @param tax_id
-    * @param tax_exempt
-    * @param tax_exempt_reason
-    * @param custom_field_1
-    * @param custom_field_2
-    * @param password
-    * @param skip_notification
-
-*/
-
-public function createAccount($parameters = array()) { return $this->http('POST','Account/Create', $parameters); }
-
-
-
-/* updateAccount
-
-Update information on an existing customers account.
-
-    * Required Parameters:
-    * @param customer_account_id
-
-    * Optional Parameters:
-    * @param company_name
-    * @param first_name
-    * @param last_name
-    * @param email_address
-    * @param cc_email_address
-    * @param phone_number_country_code
-    * @param phone_number
-    * @param address
-    * @param address_2
-    * @param unit
-    * @param unit_type
-    * @param city
-    * @param state
-    * @param zip_code
-    * @param country
-    * @param locale
-    * @param timezone_id
-    * @param tax_id
-    * @param tax_exempt
-    * @param tax_exempt_reason
-    * @param custom_field_1
-    * @param custom_field_2
-
-*/
-
-public function updateAccount($parameters = array()) { return $this->http('PATCH','Account/Update', $parameters); }
-
-
-
-/* suspendAccount
-
-Suspend a customers account.
-
-    * Required Parameters:
-    * @param customer_account_id
-
-*/
-
-public function suspendAccount($customer_account_id) { return $this->http('PATCH', 'Account/Suspend', ['customer_account_id' => $customer_account_id]); }
-
-
-
-/* deleteAccount
-
-Delete a customers account.
-
-    * Required Parameters:
-    * @param customer_account_id
-
-*/
-
-public function deleteAccount($customer_account_id) { return $this->http('DELETE', 'Account/Delete', ['customer_account_id' => $customer_account_id]); }
-
-
-
-/* restoreAccount
-
-Restore a customer account from suspended or deleted.
-
-    * Required Parameters:
-    * @param customer_account_id
-
-*/
-
-public function restoreAccount($customer_account_id) { return $this->http('PATCH', 'Account/Restore', ['customer_account_id' => $customer_account_id]); }
-
-
-
-/* listUser
-
-List all users for a brand using the search criteria below. Max results 300.
-
-    * Optional Parameters:
+    * @param subscription_id
+    * @param invoice_id
     * @param user_id
-    * @param customer_account_id
-    * @param email_address
-    * @param username
-    * @param access_level
-    * @param IAM_policy_id
-    * @param custom_field_1
-    * @param custom_field_2
-    * @param verified
-
-*/
-
-public function listUser($parameters = array()) { return $this->http('GET','User/List', $parameters); }
-
-
-
-/* createUser
-
-Create a new user connected to a customer account.
-
-    * Required Parameters:
-    * @param customer_account_id
-    * @param first_name
-    * @param last_name
-    * @param email_address
-    * @param access_level
-    * @param IAM_policy_id
-    * @param locale
-    * @param timezone_id
-    * @param send_new_user_email
-
-    * Optional Parameters:
-    * @param phone_number_country_code
-    * @param phone_number
-    * @param password
-    * @param custom_field_1
-    * @param custom_field_2
-    * @param avatar_uri
-
-*/
-
-public function createUser($parameters = array()) { return $this->http('POST','User/Create', $parameters); }
-
-
-
-/* updateUser
-
-Update an existing user profile. Only provide the parameters you wish to update.
-
-    * Required Parameters:
-    * @param user_id
-    * @param access_level
-    * @param IAM_policy_id
-
-    * Optional Parameters:
-    * @param first_name
-    * @param last_name
-    * @param email_address
-    * @param phone_number_country_code
-    * @param phone_number
-    * @param password
-    * @param custom_field_1
-    * @param custom_field_2
-    * @param avatar_uri
-    * @param locale
-    * @param timezone_id
-
-*/
-
-public function updateUser($parameters = array()) { return $this->http('PATCH','User/Update', $parameters); }
-
-
-
-/* suspendUser
-
-Suspend a user and place the 'user_id' in suspended status.
-
-    * Required Parameters:
-    * @param user_id
-
-*/
-
-public function suspendUser($user_id) { return $this->http('PATCH', 'User/Suspend', ['user_id' => $user_id]); }
-
-
-
-/* deleteUser
-
-Delete a specific user or 'user_id'.
-
-    * Required Parameters:
-    * @param user_id
-
-*/
-
-public function deleteUser($user_id) { return $this->http('PATCH', 'User/Delete', ['user_id' => $user_id]); }
-
-
-
-/* restoreUser
-
-Restore a user from suspended or deleted.
-
-    * Required Parameters:
-    * @param user_id
-
-*/
-
-public function restoreUser($user_id) { return $this->http('PATCH', 'User/Restore', ['user_id' => $user_id]); }
-
-
-
-/* authenticateUser
-
-Authenticate a user as part of a sign in process.
-
-    * Optional Parameters:
-    * @param email_address
-    * @param username
-    * @param password
-    * @param override_password_requirement
+    * @param api_category
+    * @param api_service
     * @param ip_address
-    * @param url
-    * @param temporary_token
 
 */
 
-public function authenticateUser($parameters = array()) { return $this->http('POST','User/Authenticate', $parameters); }
+public function listTransaction($parameters = array()) { return $this->http('GET','Transaction/List', $parameters); }
 
 
 
-/* _2FARequestUser
+/* listTicket
 
-The 2FARequest service sends a two-factor authentication (2FA) verification code to the user through the specified channel: SMS, phone call, or email. Note: SMS and phone call requests may incur additional fees. When using this service to verify an email address (verification_type = 'email'), and the provided email matches a customer account's email address, the customer account will automatically be marked as verified.
-
-    * Required Parameters:
-    * @param verification_user_id
-    * @param verification_method
+List and search for one or multiple support tickets.
 
     * Optional Parameters:
-    * @param verification_email_address
-    * @param verification_number_country_code
-    * @param verification_number
-
-*/
-
-public function _2FARequestUser($parameters = array()) { return $this->http('POST','User/2FARequest', $parameters); }
-
-
-
-/* _2FAVerifyUser
-
-Verify a users identity; email address; or phone number using the verification code sent via the 'User/2FARequest' notification. If verification is successful the users details will be returned with the 'authenticated' namespace set to 'Y'.
-
-    * Required Parameters:
-    * @param verification_user_id
-    * @param verification_code
-    * @param verification_method
-
-    * Optional Parameters:
-    * @param force_verification
-
-*/
-
-public function _2FAVerifyUser($parameters = array()) { return $this->http('POST','User/2FAVerify', $parameters); }
-
-
-
-/* listNote
-
-List notes connected to an account, subscription, or invoice.
-
-    * Optional Parameters:
-    * @param note_id
+    * @param ticket_id
+    * @param friendly_ticket_id
+    * @param direction
+    * @param working_status
     * @param customer_account_id
     * @param subscription_id
-    * @param invoice_id
+    * @param
 
 */
 
-public function listNote($parameters = array()) { return $this->http('GET','Note/List', $parameters); }
+public function listTicket($parameters = array()) { return $this->http('GET','Ticket/List', $parameters); }
 
 
 
-/* createNote
+/* createTicket
 
-Notes allow you to store short messages (or notes) on the stack and connect them with a customer account, invoice, or subscription for easy cross referencing.
-
-If you have formatted data to store consider using one of 'custom_field_1' or 'custom_field_2', both of which are available on subscriptions, accounts, and invoices.
+Create a new ticket or create a new message on an existing ticket.
 
     * Required Parameters:
-    * @param subject
-    * @param contents
-
-    * Optional Parameters:
-    * @param customer_account_id
-    * @param subscription_id
-    * @param invoice_id
-
-*/
-
-public function createNote($parameters = array()) { return $this->http('POST','Note/Create', $parameters); }
-
-
-
-/* deleteNote
-
-Delete an existing note.
-
-    * Required Parameters:
-    * @param note_id
-
-*/
-
-public function deleteNote($note_id) { return $this->http('DELETE', 'Note/Delete', ['note_id' => $note_id]); }
-
-
-
-/* passwdResetUser
-
-This service will send a temporary password good for one hour to the users e-mail address.
-
-    * Optional Parameters:
-    * @param email_address
-    * @param username
-
-*/
-
-public function passwdResetUser($parameters = array()) { return $this->http('POST','User/PasswdReset', $parameters); }
-
-
-
-/* createTokenUser
-
-This service allows you to create a temporary token that can be used with the 'User/Authenticate' service allowing you to bypass the username and password requirement.
-
-A temporary link for the user to sign in to the Customer Facing Portal (CFP) without using their credentials will also be generated. Utilize this link if for example your customer is already signed in to an existing app and you'd like to direct them to the CFP for account management from within that app using either a button or link.
-
-    * Required Parameters:
-    * @param customer_account_id
-    * @param user_id
-
-    * Optional Parameters:
-    * @param expiration
-    * @param cfp_redirect
-
-*/
-
-public function createTokenUser($parameters = array()) { return $this->http('POST','User/CreateToken', $parameters); }
-
-
-
-/* oAuthAuthenticateUser
-
-Creates a link allowing an end-user to sign in or create a new account with a third party identity service. Currently, Facebook and Google are supported identity providers. Upon successful authentication the end-user will be redirected to your 'redirect_uri' with a 'temporary_token' appended to the url. You can call the 'User/Authenticate' service with the 'temporary_token' to retreive the users account details.
-
-    * Required Parameters:
-    * @param identity_service
-    * @param redirect_uri
-    * @param failure_uri
-    * @param create_if_not_exists
-
-*/
-
-public function oAuthAuthenticateUser($parameters = array()) { return $this->http('POST','User/OAuthAuthenticate', $parameters); }
-
-
-
-/* listNotification
-
-Use this service to list and search for email notifications.
-
-    * Optional Parameters:
-    * @param notification_id
-    * @param notification_event
-
-*/
-
-public function listNotification($parameters = array()) { return $this->http('GET','Notification/List', $parameters); }
-
-
-
-/* createNotification
-
-Create and customize a new email notification. Notifications can be triggered for select events on the RecurringStack™ platform. You can choose to send a customized notification to yourself (the brand) and/or the customer.
-
-Until and unless a notification is setup you or your customers will not receive any emails from the RecurringStack™ platform during the normal course of business.
-
-    * Required Parameters:
-    * @param notification_event
-    * @param default_notify_brand
-    * @param default_notify_customer
-    * @param from_email
-
-    * Optional Parameters:
-    * @param default_notify_brand_email
-    * @param subject_brand
-    * @param subject_customer
-    * @param html_brand
-    * @param html_customer
-
-*/
-
-public function createNotification($parameters = array()) { return $this->http('POST','Notification/Create', $parameters); }
-
-
-
-/* updateNotification
-
-Update an existing email notification template.
-
-    * Required Parameters:
-    * @param notification_id
-    * @param default_notify_brand
-    * @param default_notify_customer
-    * @param from_email
-
-    * Optional Parameters:
-    * @param default_notify_brand_email
-    * @param subject_brand
-    * @param subject_customer
-    * @param html_brand
-    * @param html_customer
-
-*/
-
-public function updateNotification($parameters = array()) { return $this->http('PATCH','Notification/Update', $parameters); }
-
-
-
-/* deleteNotification
-
-Delete an existing email notification.
-
-    * Required Parameters:
-    * @param notification_id
-
-*/
-
-public function deleteNotification($notification_id) { return $this->http('DELETE', 'Notification/Delete', ['notification_id' => $notification_id]); }
-
-
-
-/* restoreNotification
-
-Restore a previously deleted notification.
-
-This service will be unable to restore a notification if one of the same type already exists.
-
-    * Required Parameters:
-    * @param notification_id
-
-*/
-
-public function restoreNotification($notification_id) { return $this->http('POST', 'Notification/Restore', ['notification_id' => $notification_id]); }
-
-
-
-/* listInvoice
-
-List all invoices connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 50. If a 'customer_account_id' or 'subscription_id' are provided a maximum of 400 results is returned.
-
-    * Optional Parameters:
-    * @param invoice_id
-    * @param customer_account_id
-    * @param subscription_id
-    * @param custom_field_1
-    * @param custom_field_2
-
-*/
-
-public function listInvoice($parameters = array()) { return $this->http('GET','Invoice/List', $parameters); }
-
-
-
-/* createInvoice
-
-Create a manual invoice. This service allows you to send invoices to customers for services outside of any subscription.
-
-    * Required Parameters:
-    * @param customer_account_id
-    * @param attached_items
-    * @param due_date
-
-    * Optional Parameters:
-    * @param custom_field_1
-    * @param custom_field_2
-
-*/
-
-public function createInvoice($parameters = array()) { return $this->http('POST','Invoice/Create', $parameters); }
-
-
-
-/* updateInvoice
-
-Update an existing invoice.
-
-    * Required Parameters:
-    * @param invoice_id
-    * @param customer_account_id
-    * @param due_date
-
-    * Optional Parameters:
-    * @param attached_items
-
-*/
-
-public function updateInvoice($parameters = array()) { return $this->http('PATCH','Invoice/Update', $parameters); }
-
-
-
-/* deleteInvoice
-
-Delete a previously created invoice. This function works for invoices automatically generated for subscriptions and manual created invoices.
-
-    * Required Parameters:
-    * @param invoice_id
-    * @param customer_account_id
-
-*/
-
-public function deleteInvoice($parameters = array()) { return $this->http('DELETE','Invoice/Delete', $parameters); }
-
-
-
-/* reminderInvoice
-
-Send the 'Invoice/Reminder' notification to a customer.
-
-    * Required Parameters:
-    * @param customer_account_id
-    * @param invoice_id
-
-    * Optional Parameters:
-    * @param bypass_overdue
-
-*/
-
-public function reminderInvoice($parameters = array()) { return $this->http('POST','Invoice/Reminder', $parameters); }
-
-
-
-/* listCategory
-
-List all category's in a brands knowledgeable library.
-
-    * Optional Parameters:
-    * @param category_id
-    * @param category_type
-    * @param parent_category_id
-    * @param name
-    * @param show_sub_categories
-
-*/
-
-public function listCategory($parameters = array()) { return $this->http('GET','Category/List', $parameters); }
-
-
-
-/* createCategory
-
-Create a primary or sub category in the knowledgebase library.
-
-    * Required Parameters:
-    * @param name
-    * @param category_type
-    * @param visibility
-
-    * Optional Parameters:
-    * @param summary
-    * @param parent_category_id
-
-*/
-
-public function createCategory($parameters = array()) { return $this->http('POST','Category/Create', $parameters); }
-
-
-
-/* updateCategory
-
-Update a category.
-
-    * Required Parameters:
-    * @param category_id
-    * @param name
-    * @param category_type
-    * @param visibility
-
-    * Optional Parameters:
-    * @param summary
-    * @param parent_category_id
-
-*/
-
-public function updateCategory($parameters = array()) { return $this->http('PATCH','Category/Update', $parameters); }
-
-
-
-/* deleteCategory
-
-Delete a category.
-
-    * Required Parameters:
-    * @param category_id
-
-*/
-
-public function deleteCategory($category_id) { return $this->http('DELETE', 'Category/Delete', ['category_id' => $category_id]); }
-
-
-
-/* restoreCategory
-
-Restore a category from deleted.
-
-    * Required Parameters:
-    * @param category_id
-
-*/
-
-public function restoreCategory($category_id) { return $this->http('PATCH', 'Category/Restore', ['category_id' => $category_id]); }
-
-
-
-/* listArticle
-
-List one or more library articles using the specified search criteria.
-
-    * Optional Parameters:
-    * @param article_id
-    * @param category_id
-    * @param tags
-
-*/
-
-public function listArticle($parameters = array()) { return $this->http('GET','Article/List', $parameters); }
-
-
-
-/* createArticle
-
-Create a new article in the library under a category or sub category.
-
-    * Required Parameters:
-    * @param category_id
-    * @param title
-    * @param contents
-    * @param tags
-    * @param visibility
-
-    * Optional Parameters:
-    * @param summary
-
-*/
-
-public function createArticle($parameters = array()) { return $this->http('POST','Article/Create', $parameters); }
-
-
-
-/* updateArticle
-
-Update an existing library article.
-
-    * Required Parameters:
-    * @param article_id
-    * @param category_id
-    * @param title
-    * @param contents
-    * @param tags
-    * @param visibility
-
-    * Optional Parameters:
-    * @param summary
-
-*/
-
-public function updateArticle($parameters = array()) { return $this->http('PATCH','Article/Update', $parameters); }
-
-
-
-/* deleteArticle
-
-Delete a library artcile.
-
-    * Required Parameters:
-    * @param article_id
-
-*/
-
-public function deleteArticle($article_id) { return $this->http('DELETE', 'Article/Delete', ['article_id' => $article_id]); }
-
-
-
-/* restoreArticle
-
-Restore a library article that's been previously deleted.
-
-    * Required Parameters:
-    * @param article_id
-
-*/
-
-public function restoreArticle($article_id) { return $this->http('PATCH', 'Article/Restore', ['article_id' => $article_id]); }
-
-
-
-/* listPayMethod
-
-Get a list or search for a specific payment method on a customer account. Max results 300.
-
-    * Optional Parameters:
-    * @param pay_method_id
-    * @param customer_account_id
-
-*/
-
-public function listPayMethod($parameters = array()) { return $this->http('GET','PayMethod/List', $parameters); }
-
-
-
-/* createPayMethod
-
-Add a new payment method (credit card or bank account) to a customer account. The payment information is attached to the customer account within the brand as opposed to any individual subscription itself.
-
-    * Required Parameters:
-    * @param customer_account_id
     * @param type
-    * @param account_number
-    * @param require_verification
+    * @param message
 
     * Optional Parameters:
-    * @param routing_number
-    * @param account_type
-    * @param expiration_month
-    * @param expiration_year
-    * @param card_security_code
-    * @param plaid_account_id
-    * @param plaid_access_token
-    * @param plaid_item_id
+    * @param ticket_id
+    * @param attachments
+    * @param subject
+    * @param direction
+    * @param department
+    * @param customer_account_id
+    * @param customer_user_id
+    * @param subscription_id
+    * @param guest_email
+
+*/
+
+public function createTicket($parameters = array()) { return $this->http('POST','Ticket/Create', $parameters); }
+
+
+
+/* updateTicket
+
+Update an existing ticket, including the ticket status.
+
+    * Required Parameters:
+    * @param ticket_id
+
+    * Optional Parameters:
+    * @param subject
+    * @param working_status
+    * @param department
+    * @param customer_account_id
+    * @param subscription_id
+
+*/
+
+public function updateTicket($parameters = array()) { return $this->http('PATCH','Ticket/Update', $parameters); }
+
+
+
+/* mergeTicket
+
+Merge one ticket with another ticket. Messages from both tickets will be maintained while the subject of the original ticket (ticket_id) will be maintained.
+
+    * Required Parameters:
+    * @param ticket_id
+    * @param merge_ticket_id
+
+*/
+
+public function mergeTicket($parameters = array()) { return $this->http('PATCH','Ticket/Merge', $parameters); }
+
+
+
+/* deleteTicket
+
+Delete a support ticket.
+
+    * Required Parameters:
+    * @param ticket_id
+
+*/
+
+public function deleteTicket($ticket_id) { return $this->http('DELETE', 'Ticket/Delete', ['ticket_id' => $ticket_id]); }
+
+
+
+/* listSubscription
+
+List existing subscriptions. Maximum resuts is 100 subscriptions.
+
+    * Optional Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+    * @param status
     * @param custom_field_1
     * @param custom_field_2
 
 */
 
-public function createPayMethod($parameters = array()) { return $this->http('POST','PayMethod/Create', $parameters); }
+public function listSubscription($parameters = array()) { return $this->http('GET','Subscription/List', $parameters); }
 
 
 
-/* verifyPayMethod
+/* estimateSubscription
 
-Utilize this endpoint to verify a payment method.
-
-    * Required Parameters:
-    * @param pay_method_id
-
-    * Optional Parameters:
-    * @param micro_charge_amount
-    * @param force_verification
-
-*/
-
-public function verifyPayMethod($parameters = array()) { return $this->http('POST','PayMethod/Verify', $parameters); }
-
-
-
-/* historyPayMethod
-
-List the payment history for a specific payment method or account.
-
-    * Optional Parameters:
-    * @param pay_method_id
-    * @param customer_account_id
-
-*/
-
-public function historyPayMethod($parameters = array()) { return $this->http('GET','PayMethod/History', $parameters); }
-
-
-
-/* deletePayMethod
-
-Delete a pay method from an account. The pay method will be unassociated with any existing associated subscriptions.
-
-    * Required Parameters:
-    * @param pay_method_id
-
-*/
-
-public function deletePayMethod($pay_method_id) { return $this->http('DELETE', 'PayMethod/Delete', ['pay_method_id' => $pay_method_id]); }
-
-
-
-/* listPayment
-
-List payments connected to a customer account, invoice, or subscription.
-
-    * Optional Parameters:
-    * @param payment_id
-    * @param invoice_id
-    * @param customer_account_id
-    * @param pay_method_id
-    * @param subscription_id
-    * @param payment_transaction_id
-
-*/
-
-public function listPayment($parameters = array()) { return $this->http('GET','Payment/List', $parameters); }
-
-
-
-/* createPayment
-
-Post a payment to an existing invoice using a pay method on the customers account or using 'Cash' or other form of third party pay method.
+Estimate the cost of creating a new subscription for a customer. This endpoint allows you to calculate and optionally display the up-front and future cost of a subscription to a customer.
 
     * Required Parameters:
     * @param customer_account_id
-    * @param apply_to_prepaid_balance
-    * @param override_billing
-    * @param amount
+    * @param product_id
 
     * Optional Parameters:
-    * @param invoice_id
+    * @param attached_components
+    * @param coupon_code
+    * @param pay_method_id
+    * @param override_initial_billing
+
+*/
+
+public function estimateSubscription($parameters = array()) { return $this->http('GET','Subscription/Estimate', $parameters); }
+
+
+
+/* createSubscription
+
+Create a new subscription for a customer.
+
+When creating a subscription, you must specify a product (product_id) and a customer (customer_account_id). One or more components can be attached to the subscription at the time of it's creation or you can attach components at any time in the future.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param product_id
+    * @param override_initial_billing
+    * @param auto_pay
+
+    * Optional Parameters:
+    * @param attached_components
+    * @param coupon_code
     * @param pay_method_id
     * @param payment_gateway
     * @param payment_transaction_id
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param VAR1
+    * @param VAR2
+    * @param VAR3
+    * @param VAR4
+    * @param VAR5
+    * @param VAR6
+    * @param VAR7
+    * @param VAR8
+    * @param VAR9
+    * @param VAR10
 
 */
 
-public function createPayment($parameters = array()) { return $this->http('POST','Payment/Create', $parameters); }
+public function createSubscription($parameters = array()) { return $this->http('POST','Subscription/Create', $parameters); }
 
 
 
-/* deletePayment
+/* updateSubscription
 
-Delete an existing payment. If the payment was processed with a real time gateway, RecurringStack™ will attempt to refund the payment using the same gatway.
+Update an existing subscription.
+
+Changes made to a subscription will take effect immediately. If changes are made before the billing cycle renewal date the next payment will be calculated using the updated data (after the change), not the old data (before the change).
 
     * Required Parameters:
-    * @param payment_id
+    * @param subscription_id
     * @param customer_account_id
-    * @param invoice_id
-
-*/
-
-public function deletePayment($parameters = array()) { return $this->http('DELETE','Payment/Delete', $parameters); }
-
-
-
-/* listPayGateway
-
-List all of your previously connected real-time payment gateways associated with the brand. This service will also list all payment gateways supported by RecurringStack™ along with their required credentials (leave 'gateway_id' parameter empty).
+    * @param auto_pay
 
     * Optional Parameters:
-    * @param gateway_id
-    * @param gateway_provider
-
-*/
-
-public function listPayGateway($parameters = array()) { return $this->http('GET','PayGateway/List', $parameters); }
-
-
-
-/* createPayGateway
-
-Create or link a new payment gateway to process real-time payments.
-
-    * Required Parameters:
-    * @param name
-    * @param gateway_provider
-    * @param credentials_1
-
-    * Optional Parameters:
-    * @param credentials_2
-    * @param default_cc
-    * @param default_ba
-
-*/
-
-public function createPayGateway($parameters = array()) { return $this->http('POST','PayGateway/Create', $parameters); }
-
-
-
-/* updatePayGateway
-
-Update a previously linked payment gateway and/or set it as the brands default credit card or ACH real-time processing gateway.
-
-    * Required Parameters:
-    * @param gateway_id
-    * @param name
-    * @param credentials_1
-
-    * Optional Parameters:
-    * @param credentials_2
-    * @param default_cc
-    * @param default_ba
-
-*/
-
-public function updatePayGateway($parameters = array()) { return $this->http('PATCH','PayGateway/Update', $parameters); }
-
-
-
-/* deletePayGateway
-
-Delete an existing payment gateway. If the pay gateway is currently the default for the brand, the brand will be left without a default gateway for payment processing.
-
-    * Required Parameters:
-    * @param gateway_id
-
-*/
-
-public function deletePayGateway($gateway_id) { return $this->http('DELETE', 'PayGateway/Delete', ['gateway_id' => $gateway_id]); }
-
-
-
-/* setDefaultPayMethod
-
-Set or unset a payment method as default on a customer account. If the payment method is already the defualt for the account, calling this service will remove it. Likewise, if the payment method is currently not the default payment method this service will set it as default.
-
-Default payment methods are utilized for automated recurring subscription billing / invoice payment when 'auto_renew' is set to Y on the subscription.
-
-    * Required Parameters:
+    * @param attached_components
+    * @param coupon_code
+    * @param payment_transaction_id
+    * @param renewal_date
     * @param pay_method_id
-    * @param customer_account_id
-    * @param type
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param VAR1
+    * @param VAR2
+    * @param VAR3
+    * @param VAR4
+    * @param VAR5
+    * @param VAR6
+    * @param VAR7
+    * @param VAR8
+    * @param VAR9
+    * @param VAR10
 
 */
 
-public function setDefaultPayMethod($parameters = array()) { return $this->http('PATCH','PayMethod/SetDefault', $parameters); }
+public function updateSubscription($parameters = array()) { return $this->http('POST','Subscription/Update', $parameters); }
+
+
+
+/* changeProductSubscription
+
+Change the product associated with an existing subscription.
+
+    * Required Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+    * @param product_id
+
+    * Optional Parameters:
+    * @param remove_components
+    * @param remove_coupons
+
+*/
+
+public function changeProductSubscription($parameters = array()) { return $this->http('POST','Subscription/ChangeProduct', $parameters); }
+
+
+
+/* suspendSubscription
+
+Place a active subscription in a suspended state.
+
+    * Required Parameters:
+    * @param subscription_id
+
+*/
+
+public function suspendSubscription($subscription_id) { return $this->http('PATCH', 'Subscription/Suspend', ['subscription_id' => $subscription_id]); }
+
+
+
+/* deleteSubscription
+
+Cancel/delete a subscription.
+
+    * Required Parameters:
+    * @param subscription_id
+
+*/
+
+public function deleteSubscription($subscription_id) { return $this->http('DELETE', 'Subscription/Delete', ['subscription_id' => $subscription_id]); }
+
+
+
+/* reportUsageSubscription
+
+This service allows you to report usage for a compnent already attached to a subscription.
+
+You may choose to report metered or prepaid usage as you wish. If usage events occur in your system very frequently (hundreads of times an hour or more), it is best to accumulate usage into batches on your side, and then report those batches less frequently, such as daily. This will ensure you remain below any API throttling limits.
+
+    * Required Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+    * @param component_id
+    * @param units
+    * @param expression_type
+
+*/
+
+public function reportUsageSubscription($parameters = array()) { return $this->http('PATCH','Subscription/ReportUsage', $parameters); }
+
+
+
+/* restoreSubscription
+
+If you suspended or paused a subscription for any reason you can utilize this service to restore it.
+
+RecurringStack™ may also suspend a subscription in accordance with your dunning rules (usually when a customer has unpaid invoices), this service may be used to override these kind of suspension as well.
+
+    * Required Parameters:
+    * @param subscription_id
+
+*/
+
+public function restoreSubscription($subscription_id) { return $this->http('PATCH', 'Subscription/Restore', ['subscription_id' => $subscription_id]); }
+
+
+
+/* listOffer
+
+List one or more offers connected to the brand.
+
+    * Optional Parameters:
+    * @param offer_id
+
+*/
+
+public function listOffer($parameters = array()) { return $this->http('GET','Offer/List', $parameters); }
+
+
+
+/* updateAutoPaySubscription
+
+Update the auto pay status and pay method for a subscription.
+
+    * Required Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+    * @param auto_pay
+
+    * Optional Parameters:
+    * @param pay_method_id
+
+*/
+
+public function updateAutoPaySubscription($parameters = array()) { return $this->http('PATCH','Subscription/UpdateAutoPay', $parameters); }
+
+
+
+/* listSubscriptionEvent
+
+Find events connected to a subscrption.
+
+    * Optional Parameters:
+    * @param event_id
+
+*/
+
+public function listSubscriptionEvent($parameters = array()) { return $this->http('GET','SubscriptionEvent/List', $parameters); }
+
+
+
+/* createSubscriptionEvent
+
+Create a new subscription event. Events can record actions that take place outside of normal subscription billing but are connected to the subscription. For example, a pre-cooked food service may record an event each time it ships a new food box to a customer.
+
+    * Required Parameters:
+    * @param event_type
+    * @param subscription_id
+    * @param customer_account_id
+    * @param name
+    * @param description
+
+    * Optional Parameters:
+    * @param custom_field_1
+    * @param custom_field_2
+
+*/
+
+public function createSubscriptionEvent($parameters = array()) { return $this->http('POST','SubscriptionEvent/Create', $parameters); }
+
+
+
+/* deleteSubscriptionEvent
+
+Delete an event connect to a subscription
+
+    * Required Parameters:
+    * @param event_id
+
+*/
+
+public function deleteSubscriptionEvent($event_id) { return $this->http('DELETE', 'SubscriptionEvent/Delete', ['event_id' => $event_id]); }
+
+
+
+/* listReference
+
+Utilize the reference endpoint to find reference data needed for other API services.
+
+    * Required Parameters:
+    * @param reference_type
+
+*/
+
+public function listReference($reference_type) { return $this->http('GET', 'Reference/List', ['reference_type' => $reference_type]); }
 
 
 
@@ -1717,350 +979,1482 @@ public function deleteDunningRule($rule_id) { return $this->http('DELETE', 'Dunn
 
 
 
-/* listReference
+/* listPayMethod
 
-Utilize the reference endpoint to find reference data needed for other API services.
+Get a list or search for a specific payment method on a customer account. Max results 300.
 
-    * Required Parameters:
-    * @param reference_type
+    * Optional Parameters:
+    * @param pay_method_id
+    * @param customer_account_id
 
 */
 
-public function listReference($reference_type) { return $this->http('GET', 'Reference/List', ['reference_type' => $reference_type]); }
+public function listPayMethod($parameters = array()) { return $this->http('GET','PayMethod/List', $parameters); }
 
 
 
-/* listSubscription
+/* createPayMethod
 
-List existing subscriptions. Maximum resuts is 100 subscriptions.
+This endpoint initiates the creation of a new payment asset (Credit Card or Bank Account) within a customer's Wallet. It generates a secure, hosted Wallet Session link, providing a PCI-compliant environment for your customers to enter their sensitive details.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param gateway_id
+    * @param type
+    * @param success_url
+    * @param require_verification
 
     * Optional Parameters:
-    * @param subscription_id
+    * @param cancel_url
+    * @param failure_url
+    * @param custom_field_1
+    * @param custom_field_2
+
+*/
+
+public function createPayMethod($parameters = array()) { return $this->http('POST','PayMethod/Create', $parameters); }
+
+
+
+/* verifyPayMethod
+
+Utilize this endpoint to verify a payment method.
+
+    * Required Parameters:
+    * @param pay_method_id
+
+    * Optional Parameters:
+    * @param micro_charge_amount
+    * @param force_verification
+
+*/
+
+public function verifyPayMethod($parameters = array()) { return $this->http('POST','PayMethod/Verify', $parameters); }
+
+
+
+/* deletePayMethod
+
+Delete a pay method from an account. The pay method will be unassociated with any existing associated subscriptions.
+
+    * Required Parameters:
+    * @param pay_method_id
+
+*/
+
+public function deletePayMethod($pay_method_id) { return $this->http('DELETE', 'PayMethod/Delete', ['pay_method_id' => $pay_method_id]); }
+
+
+
+/* listPayment
+
+List payments connected to a customer account, invoice, or subscription.
+
+    * Optional Parameters:
+    * @param payment_id
+    * @param invoice_id
     * @param customer_account_id
+    * @param pay_method_id
+    * @param subscription_id
+    * @param payment_transaction_id
+
+*/
+
+public function listPayment($parameters = array()) { return $this->http('GET','Payment/List', $parameters); }
+
+
+
+/* createPayment
+
+Post a payment to an existing invoice using a pay method on the customers account or using 'Cash' or other form of third party pay method.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param apply_to_prepaid_balance
+    * @param override_billing
+    * @param amount
+
+    * Optional Parameters:
+    * @param invoice_id
+    * @param pay_method_id
+    * @param payment_gateway
+    * @param payment_transaction_id
+
+*/
+
+public function createPayment($parameters = array()) { return $this->http('POST','Payment/Create', $parameters); }
+
+
+
+/* deletePayment
+
+Delete an existing payment. If the payment was processed with a real time gateway, RecurringStack™ will attempt to refund the payment using the same gatway.
+
+    * Required Parameters:
+    * @param payment_id
+    * @param customer_account_id
+    * @param invoice_id
+
+*/
+
+public function deletePayment($parameters = array()) { return $this->http('DELETE','Payment/Delete', $parameters); }
+
+
+
+/* listPayGateway
+
+List all of your previously connected real-time payment gateways associated with the brand. This service will also list all payment gateways supported by RecurringStack™ along with their required credentials (leave 'gateway_id' parameter empty).
+
+    * Optional Parameters:
+    * @param gateway_id
+    * @param gateway_provider
+
+*/
+
+public function listPayGateway($parameters = array()) { return $this->http('GET','PayGateway/List', $parameters); }
+
+
+
+/* createPayGateway
+
+Create or link a new payment gateway to process real-time payments.
+
+    * Required Parameters:
+    * @param name
+    * @param gateway_provider
+    * @param credentials_1
+
+    * Optional Parameters:
+    * @param credentials_2
+    * @param credentials_3
+    * @param default_cc
+    * @param default_ba
+
+*/
+
+public function createPayGateway($parameters = array()) { return $this->http('POST','PayGateway/Create', $parameters); }
+
+
+
+/* updatePayGateway
+
+Update a previously linked payment gateway and/or set it as the brands default credit card or ACH real-time processing gateway.
+
+    * Required Parameters:
+    * @param gateway_id
+    * @param name
+    * @param credentials_1
+
+    * Optional Parameters:
+    * @param credentials_2
+    * @param default_cc
+    * @param default_ba
+
+*/
+
+public function updatePayGateway($parameters = array()) { return $this->http('PATCH','PayGateway/Update', $parameters); }
+
+
+
+/* deletePayGateway
+
+Delete an existing payment gateway. If the pay gateway is currently the default for the brand, the brand will be left without a default gateway for payment processing.
+
+    * Required Parameters:
+    * @param gateway_id
+
+*/
+
+public function deletePayGateway($gateway_id) { return $this->http('DELETE', 'PayGateway/Delete', ['gateway_id' => $gateway_id]); }
+
+
+
+/* setDefaultPayMethod
+
+Set or unset a payment method as default on a customer account. If the payment method is already the defualt for the account, calling this service will remove it. Likewise, if the payment method is currently not the default payment method this service will set it as default.
+
+Default payment methods are utilized for automated recurring subscription billing / invoice payment when 'auto_renew' is set to Y on the subscription.
+
+    * Required Parameters:
+    * @param pay_method_id
+    * @param customer_account_id
+    * @param type
+
+*/
+
+public function setDefaultPayMethod($parameters = array()) { return $this->http('PATCH','PayMethod/SetDefault', $parameters); }
+
+
+
+/* listMarketingCampaign
+
+List or search for one or more marketing campaigns.
+
+    * Optional Parameters:
+    * @param campaign_id
+
+*/
+
+public function listMarketingCampaign($parameters = array()) { return $this->http('GET','MarketingCampaign/List', $parameters); }
+
+
+
+/* createMarketingCampaign
+
+Create a new email marketing campaign with html or text contents.
+
+    * Required Parameters:
+    * @param name
+    * @param subject
+    * @param html_content
+    * @param from_email
+
+*/
+
+public function createMarketingCampaign($parameters = array()) { return $this->http('POST','MarketingCampaign/Create', $parameters); }
+
+
+
+/* updateMarketingCampaign
+
+Update the details of an existing email marketing campaign.
+
+    * Required Parameters:
+    * @param campaign_id
+    * @param name
+    * @param subject
+    * @param html_content
+    * @param from_email
+
+*/
+
+public function updateMarketingCampaign($parameters = array()) { return $this->http('PATCH','MarketingCampaign/Update', $parameters); }
+
+
+
+/* suspendMarketingCampaign
+
+Suspend an existing marketing campaign. This action won't pause any scheduled jobs but will prevent new jobs from being created.
+
+    * Required Parameters:
+    * @param campaign_id
+
+*/
+
+public function suspendMarketingCampaign($campaign_id) { return $this->http('PATCH', 'MarketingCampaign/Suspend', ['campaign_id' => $campaign_id]); }
+
+
+
+/* deleteMarketingCampaign
+
+Delete an existing marketing campaign.
+
+    * Required Parameters:
+    * @param campaign_id
+
+*/
+
+public function deleteMarketingCampaign($campaign_id) { return $this->http('DELETE', 'MarketingCampaign/Delete', ['campaign_id' => $campaign_id]); }
+
+
+
+/* listMarketingList
+
+List or search for one or more mailing list. This service will not return the contacts, use 'ListContacts' instead.
+
+    * Optional Parameters:
+    * @param list_id
+
+*/
+
+public function listMarketingList($parameters = array()) { return $this->http('GET','MarketingList/List', $parameters); }
+
+
+
+/* createContactMarketingList
+
+Add one or multiple contacts to an existing mailing list.
+
+    * Required Parameters:
+    * @param list_id
+    * @param contacts
+
+*/
+
+public function createContactMarketingList($parameters = array()) { return $this->http('POST','MarketingList/CreateContact', $parameters); }
+
+
+
+/* updateContactMarketingList
+
+Update one or more existing contacts on a mailing list.
+
+    * Required Parameters:
+    * @param list_id
+    * @param contacts
+
+*/
+
+public function updateContactMarketingList($parameters = array()) { return $this->http('PATCH','MarketingList/UpdateContact', $parameters); }
+
+
+
+/* listContactMarketingList
+
+List or search for one or more contacts on a mailing list.
+
+    * Required Parameters:
+    * @param list_id
+
+    * Optional Parameters:
+    * @param contact_id
+    * @param email_address
+
+*/
+
+public function listContactMarketingList($parameters = array()) { return $this->http('GET','MarketingList/ListContact', $parameters); }
+
+
+
+/* deleteContactMarketingList
+
+Delete an existing contact on a mailing list.
+
+    * Required Parameters:
+    * @param list_id
+    * @param contact_id
+
+*/
+
+public function deleteContactMarketingList($parameters = array()) { return $this->http('DELETE','MarketingList/DeleteContact', $parameters); }
+
+
+
+/* listMarketingJob
+
+List or search for one or more marketing jobs.
+
+    * Optional Parameters:
+    * @param job_id
+    * @param campaign_id
+    * @param lost_id
+
+*/
+
+public function listMarketingJob($parameters = array()) { return $this->http('GET','MarketingJob/List', $parameters); }
+
+
+
+/* createMarketingJob
+
+Create and schedule an email campaign to be sent to one of your mailing list.
+
+    * Required Parameters:
+    * @param campaign_id
+    * @param list_id
+    * @param send_at
+
+*/
+
+public function createMarketingJob($parameters = array()) { return $this->http('POST','MarketingJob/Create', $parameters); }
+
+
+
+/* suspendMarketingJob
+
+Suspend or pause an existing email marketing job.
+
+    * Required Parameters:
+    * @param job_id
+
+*/
+
+public function suspendMarketingJob($job_id) { return $this->http('PATCH', 'MarketingJob/Suspend', ['job_id' => $job_id]); }
+
+
+
+/* deleteMarketingJob
+
+Delete an existing email marketing job
+
+    * Required Parameters:
+    * @param job_id
+
+*/
+
+public function deleteMarketingJob($job_id) { return $this->http('DELETE', 'MarketingJob/Delete', ['job_id' => $job_id]); }
+
+
+
+/* restoreMarketingJob
+
+Restore a email marketing job from suspended or deleted.
+
+    * Required Parameters:
+    * @param job_id
+
+*/
+
+public function restoreMarketingJob($job_id) { return $this->http('PATCH', 'MarketingJob/Restore', ['job_id' => $job_id]); }
+
+
+
+/* createMarketingList
+
+Create a new email marketing list.
+
+    * Required Parameters:
+    * @param name
+
+    * Optional Parameters:
+    * @param description
+
+*/
+
+public function createMarketingList($parameters = array()) { return $this->http('POST','MarketingList/Create', $parameters); }
+
+
+
+/* updateMarketingList
+
+Update the details of an existing marketing list. Do not use this service to edit the contacts on your marketing list.
+
+    * Required Parameters:
+    * @param list_id
+    * @param name
+
+    * Optional Parameters:
+    * @param description
+
+*/
+
+public function updateMarketingList($parameters = array()) { return $this->http('PATCH','MarketingList/Update', $parameters); }
+
+
+
+/* deleteMarketingList
+
+Delete an existing marketing list.
+
+    * Required Parameters:
+    * @param list_id
+
+*/
+
+public function deleteMarketingList($list_id) { return $this->http('DELETE', 'MarketingList/Delete', ['list_id' => $list_id]); }
+
+
+
+/* listCategory
+
+List all category's in a brands knowledgeable library.
+
+    * Optional Parameters:
+    * @param category_id
+    * @param category_type
+    * @param parent_category_id
+    * @param name
+    * @param show_sub_categories
+
+*/
+
+public function listCategory($parameters = array()) { return $this->http('GET','Category/List', $parameters); }
+
+
+
+/* createCategory
+
+Create a primary or sub category in the knowledgebase library.
+
+    * Required Parameters:
+    * @param name
+    * @param category_type
+    * @param visibility
+
+    * Optional Parameters:
+    * @param summary
+    * @param parent_category_id
+
+*/
+
+public function createCategory($parameters = array()) { return $this->http('POST','Category/Create', $parameters); }
+
+
+
+/* updateCategory
+
+Update a category.
+
+    * Required Parameters:
+    * @param category_id
+    * @param name
+    * @param category_type
+    * @param visibility
+
+    * Optional Parameters:
+    * @param summary
+    * @param parent_category_id
+
+*/
+
+public function updateCategory($parameters = array()) { return $this->http('PATCH','Category/Update', $parameters); }
+
+
+
+/* deleteCategory
+
+Delete a category.
+
+    * Required Parameters:
+    * @param category_id
+
+*/
+
+public function deleteCategory($category_id) { return $this->http('DELETE', 'Category/Delete', ['category_id' => $category_id]); }
+
+
+
+/* restoreCategory
+
+Restore a category from deleted.
+
+    * Required Parameters:
+    * @param category_id
+
+*/
+
+public function restoreCategory($category_id) { return $this->http('PATCH', 'Category/Restore', ['category_id' => $category_id]); }
+
+
+
+/* listArticle
+
+List one or more library articles using the specified search criteria.
+
+    * Optional Parameters:
+    * @param article_id
+    * @param category_id
+    * @param tags
+
+*/
+
+public function listArticle($parameters = array()) { return $this->http('GET','Article/List', $parameters); }
+
+
+
+/* createArticle
+
+Create a new article in the library under a category or sub category.
+
+    * Required Parameters:
+    * @param category_id
+    * @param title
+    * @param contents
+    * @param tags
+    * @param visibility
+
+    * Optional Parameters:
+    * @param summary
+
+*/
+
+public function createArticle($parameters = array()) { return $this->http('POST','Article/Create', $parameters); }
+
+
+
+/* updateArticle
+
+Update an existing library article.
+
+    * Required Parameters:
+    * @param article_id
+    * @param category_id
+    * @param title
+    * @param contents
+    * @param tags
+    * @param visibility
+
+    * Optional Parameters:
+    * @param summary
+
+*/
+
+public function updateArticle($parameters = array()) { return $this->http('PATCH','Article/Update', $parameters); }
+
+
+
+/* deleteArticle
+
+Delete a library artcile.
+
+    * Required Parameters:
+    * @param article_id
+
+*/
+
+public function deleteArticle($article_id) { return $this->http('DELETE', 'Article/Delete', ['article_id' => $article_id]); }
+
+
+
+/* restoreArticle
+
+Restore a library article that's been previously deleted.
+
+    * Required Parameters:
+    * @param article_id
+
+*/
+
+public function restoreArticle($article_id) { return $this->http('PATCH', 'Article/Restore', ['article_id' => $article_id]); }
+
+
+
+/* listInvoice
+
+List all invoices connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 50. If a 'customer_account_id' or 'subscription_id' are provided a maximum of 400 results is returned.
+
+    * Optional Parameters:
+    * @param invoice_id
+    * @param customer_account_id
+    * @param subscription_id
     * @param status
     * @param custom_field_1
     * @param custom_field_2
 
 */
 
-public function listSubscription($parameters = array()) { return $this->http('GET','Subscription/List', $parameters); }
+public function listInvoice($parameters = array()) { return $this->http('GET','Invoice/List', $parameters); }
 
 
 
-/* estimateSubscription
+/* createInvoice
 
-Estimate the cost of creating a new subscription for a customer. This endpoint allows you to calculate and optionally display the up-front and future cost of a subscription to a customer.
-
-    * Required Parameters:
-    * @param customer_account_id
-    * @param product_id
-
-    * Optional Parameters:
-    * @param attached_components
-    * @param coupon_code
-    * @param pay_method_id
-    * @param override_initial_billing
-
-*/
-
-public function estimateSubscription($parameters = array()) { return $this->http('GET','Subscription/Estimate', $parameters); }
-
-
-
-/* createSubscription
-
-Create a new subscription for a customer.
-
-When creating a subscription, you must specify a product (product_id) and a customer (customer_account_id). One or more components can be attached to the subscription at the time of it's creation or you can attach components at any time in the future.
+Create a manual invoice. This service allows you to send invoices to customers for services outside of any subscription.
 
     * Required Parameters:
     * @param customer_account_id
-    * @param product_id
-    * @param override_initial_billing
-    * @param auto_pay
+    * @param attached_items
+    * @param due_date
 
     * Optional Parameters:
-    * @param attached_components
-    * @param coupon_code
-    * @param pay_method_id
-    * @param payment_gateway
-    * @param payment_transaction_id
     * @param custom_field_1
     * @param custom_field_2
-    * @param VAR1
-    * @param VAR2
-    * @param VAR3
-    * @param VAR4
-    * @param VAR5
-    * @param VAR6
-    * @param VAR7
-    * @param VAR8
-    * @param VAR9
-    * @param VAR10
 
 */
 
-public function createSubscription($parameters = array()) { return $this->http('POST','Subscription/Create', $parameters); }
+public function createInvoice($parameters = array()) { return $this->http('POST','Invoice/Create', $parameters); }
 
 
 
-/* updateSubscription
+/* updateInvoice
 
-Update an existing subscription.
-
-Changes made to a subscription will take effect immediately. If changes are made before the billing cycle renewal date the next payment will be calculated using the updated data (after the change), not the old data (before the change).
+Update an existing invoice.
 
     * Required Parameters:
-    * @param subscription_id
+    * @param invoice_id
     * @param customer_account_id
-    * @param auto_pay
+    * @param due_date
 
     * Optional Parameters:
-    * @param attached_components
-    * @param coupon_code
-    * @param payment_transaction_id
-    * @param renewal_date
-    * @param pay_method_id
+    * @param attached_items
+
+*/
+
+public function updateInvoice($parameters = array()) { return $this->http('PATCH','Invoice/Update', $parameters); }
+
+
+
+/* deleteInvoice
+
+Delete a previously created invoice. This function works for invoices automatically generated for subscriptions and manual created invoices.
+
+    * Required Parameters:
+    * @param invoice_id
+    * @param customer_account_id
+
+*/
+
+public function deleteInvoice($parameters = array()) { return $this->http('DELETE','Invoice/Delete', $parameters); }
+
+
+
+/* reminderInvoice
+
+Send the 'Invoice/Reminder' notification to a customer.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param invoice_id
+
+    * Optional Parameters:
+    * @param bypass_overdue
+
+*/
+
+public function reminderInvoice($parameters = array()) { return $this->http('POST','Invoice/Reminder', $parameters); }
+
+
+
+/* listNotification
+
+Use this service to list and search for email notifications.
+
+    * Optional Parameters:
+    * @param notification_id
+    * @param notification_event
+
+*/
+
+public function listNotification($parameters = array()) { return $this->http('GET','Notification/List', $parameters); }
+
+
+
+/* createNotification
+
+Create and customize a new email notification. Notifications can be triggered for select events on the RecurringStack™ platform. You can choose to send a customized notification to yourself (the brand) and/or the customer.
+
+Until and unless a notification is setup you or your customers will not receive any emails from the RecurringStack™ platform during the normal course of business.
+
+    * Required Parameters:
+    * @param notification_event
+    * @param default_notify_brand
+    * @param default_notify_customer
+    * @param from_email
+
+    * Optional Parameters:
+    * @param default_notify_brand_email
+    * @param subject_brand
+    * @param subject_customer
+    * @param html_brand
+    * @param html_customer
+
+*/
+
+public function createNotification($parameters = array()) { return $this->http('POST','Notification/Create', $parameters); }
+
+
+
+/* updateNotification
+
+Update an existing email notification template.
+
+    * Required Parameters:
+    * @param notification_id
+    * @param default_notify_brand
+    * @param default_notify_customer
+    * @param from_email
+
+    * Optional Parameters:
+    * @param default_notify_brand_email
+    * @param subject_brand
+    * @param subject_customer
+    * @param html_brand
+    * @param html_customer
+
+*/
+
+public function updateNotification($parameters = array()) { return $this->http('PATCH','Notification/Update', $parameters); }
+
+
+
+/* deleteNotification
+
+Delete an existing email notification.
+
+    * Required Parameters:
+    * @param notification_id
+
+*/
+
+public function deleteNotification($notification_id) { return $this->http('DELETE', 'Notification/Delete', ['notification_id' => $notification_id]); }
+
+
+
+/* restoreNotification
+
+Restore a previously deleted notification.
+
+This service will be unable to restore a notification if one of the same type already exists.
+
+    * Required Parameters:
+    * @param notification_id
+
+*/
+
+public function restoreNotification($notification_id) { return $this->http('POST', 'Notification/Restore', ['notification_id' => $notification_id]); }
+
+
+
+/* listAccount
+
+List all customer accounts connected to a specific brand or provide any of the search criteria to narrow your results. The maximum number of returned results is 300.
+
+    * Optional Parameters:
+    * @param customer_account_id
+    * @param email_address
+    * @param first_name
+    * @param last_name
+    * @param company_name
     * @param custom_field_1
     * @param custom_field_2
-    * @param VAR1
-    * @param VAR2
-    * @param VAR3
-    * @param VAR4
-    * @param VAR5
-    * @param VAR6
-    * @param VAR7
-    * @param VAR8
-    * @param VAR9
-    * @param VAR10
-
-*/
-
-public function updateSubscription($parameters = array()) { return $this->http('POST','Subscription/Update', $parameters); }
-
-
-
-/* changeProductSubscription
-
-Change the product associated with an existing subscription.
-
-    * Required Parameters:
-    * @param subscription_id
-    * @param customer_account_id
-    * @param product_id
-
-    * Optional Parameters:
-    * @param remove_components
-    * @param remove_coupons
-
-*/
-
-public function changeProductSubscription($parameters = array()) { return $this->http('POST','Subscription/ChangeProduct', $parameters); }
-
-
-
-/* suspendSubscription
-
-Place a active subscription in a suspended state.
-
-    * Required Parameters:
-    * @param subscription_id
-
-*/
-
-public function suspendSubscription($subscription_id) { return $this->http('PATCH', 'Subscription/Suspend', ['subscription_id' => $subscription_id]); }
-
-
-
-/* deleteSubscription
-
-Cancel/delete a subscription.
-
-    * Required Parameters:
-    * @param subscription_id
-
-*/
-
-public function deleteSubscription($subscription_id) { return $this->http('DELETE', 'Subscription/Delete', ['subscription_id' => $subscription_id]); }
-
-
-
-/* reportUsageSubscription
-
-This service allows you to report usage for a compnent already attached to a subscription.
-
-You may choose to report metered or prepaid usage as you wish. If usage events occur in your system very frequently (hundreads of times an hour or more), it is best to accumulate usage into batches on your side, and then report those batches less frequently, such as daily. This will ensure you remain below any API throttling limits.
-
-    * Required Parameters:
-    * @param subscription_id
-    * @param customer_account_id
-    * @param component_id
-    * @param units
-    * @param expression_type
-
-*/
-
-public function reportUsageSubscription($parameters = array()) { return $this->http('PATCH','Subscription/ReportUsage', $parameters); }
-
-
-
-/* restoreSubscription
-
-If you suspended or paused a subscription for any reason you can utilize this service to restore it.
-
-RecurringStack™ may also suspend a subscription in accordance with your dunning rules (usually when a customer has unpaid invoices), this service may be used to override these kind of suspension as well.
-
-    * Required Parameters:
-    * @param subscription_id
-
-*/
-
-public function restoreSubscription($subscription_id) { return $this->http('PATCH', 'Subscription/Restore', ['subscription_id' => $subscription_id]); }
-
-
-
-/* listOffer
-
-List one or more offers connected to the brand.
-
-    * Optional Parameters:
-    * @param offer_id
-
-*/
-
-public function listOffer($parameters = array()) { return $this->http('GET','Offer/List', $parameters); }
-
-
-
-/* updateAutoPaySubscription
-
-Updtae the auto pay status and pay method for a subscription.
-
-    * Required Parameters:
-    * @param subscription_id
-    * @param customer_account_id
-    * @param auto_pay
-
-    * Optional Parameters:
-    * @param pay_method_id
-
-*/
-
-public function updateAutoPaySubscription($parameters = array()) { return $this->http('PATCH','Subscription/UpdateAutoPay', $parameters); }
-
-
-
-/* listTicket
-
-List and search for one or multiple support tickets.
-
-    * Optional Parameters:
-    * @param ticket_id
-    * @param friendly_ticket_id
-    * @param direction
-    * @param working_status
-    * @param customer_account_id
-    * @param subscription_id
-    * @param limit
+    * @param verified
     * @param order
-    * @param offset
 
 */
 
-public function listTicket($parameters = array()) { return $this->http('GET','Ticket/List', $parameters); }
+public function listAccount($parameters = array()) { return $this->http('GET','Account/List', $parameters); }
 
 
 
-/* createTicket
+/* createAccount
 
-Create a new ticket or create a new message on an existing ticket.
+Create a new customer account and associate it with a brand. The initial user will be created based on the information and e-mail address provided.
 
     * Required Parameters:
-    * @param type
-    * @param message
+    * @param first_name
+    * @param last_name
+    * @param email_address
+    * @param country
+    * @param locale
+    * @param timezone_id
 
     * Optional Parameters:
-    * @param ticket_id
-    * @param attachments
-    * @param subject
-    * @param direction
-    * @param department
+    * @param company_name
+    * @param cc_email_address
+    * @param phone_number_country_code
+    * @param phone_number
+    * @param address
+    * @param address_2
+    * @param unit
+    * @param unit_type
+    * @param city
+    * @param state
+    * @param zip_code
+    * @param tax_id
+    * @param tax_exempt
+    * @param tax_exempt_reason
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param password
+    * @param skip_notification
+
+*/
+
+public function createAccount($parameters = array()) { return $this->http('POST','Account/Create', $parameters); }
+
+
+
+/* updateAccount
+
+Update information on an existing customers account.
+
+    * Required Parameters:
     * @param customer_account_id
-    * @param customer_user_id
-    * @param subscription_id
-    * @param guest_email
+
+    * Optional Parameters:
+    * @param company_name
+    * @param first_name
+    * @param last_name
+    * @param email_address
+    * @param cc_email_address
+    * @param phone_number_country_code
+    * @param phone_number
+    * @param address
+    * @param address_2
+    * @param unit
+    * @param unit_type
+    * @param city
+    * @param state
+    * @param zip_code
+    * @param country
+    * @param locale
+    * @param timezone_id
+    * @param tax_id
+    * @param tax_exempt
+    * @param tax_exempt_reason
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param page
+    * @param results_per_page
 
 */
 
-public function createTicket($parameters = array()) { return $this->http('POST','Ticket/Create', $parameters); }
+public function updateAccount($parameters = array()) { return $this->http('PATCH','Account/Update', $parameters); }
 
 
 
-/* updateTicket
+/* suspendAccount
 
-Update an existing ticket, including the ticket status.
+Suspend a customers account.
 
     * Required Parameters:
-    * @param ticket_id
-
-    * Optional Parameters:
-    * @param subject
-    * @param working_status
-    * @param department
     * @param customer_account_id
-    * @param subscription_id
 
 */
 
-public function updateTicket($parameters = array()) { return $this->http('PATCH','Ticket/Update', $parameters); }
+public function suspendAccount($customer_account_id) { return $this->http('PATCH', 'Account/Suspend', ['customer_account_id' => $customer_account_id]); }
 
 
 
-/* mergeTicket
+/* deleteAccount
 
-Merge one ticket with another ticket. Messages from both tickets will be maintained while the subject of the original ticket (ticket_id) will be maintained.
+Delete a customers account.
 
     * Required Parameters:
-    * @param ticket_id
-    * @param merge_ticket_id
+    * @param customer_account_id
 
 */
 
-public function mergeTicket($parameters = array()) { return $this->http('PATCH','Ticket/Merge', $parameters); }
+public function deleteAccount($customer_account_id) { return $this->http('DELETE', 'Account/Delete', ['customer_account_id' => $customer_account_id]); }
 
 
 
-/* deleteTicket
+/* restoreAccount
 
-Delete a support ticket.
+Restore a customer account from suspended or deleted.
 
     * Required Parameters:
-    * @param ticket_id
+    * @param customer_account_id
 
 */
 
-public function deleteTicket($ticket_id) { return $this->http('DELETE', 'Ticket/Delete', ['ticket_id' => $ticket_id]); }
+public function restoreAccount($customer_account_id) { return $this->http('PATCH', 'Account/Restore', ['customer_account_id' => $customer_account_id]); }
 
 
 
-/* listTransaction
+/* listUser
 
-All transactions (except 'List') are recorded in the transaction history. You can search the transaction history to find information on previous transactions.
+List all users for a brand using the search criteria below. Max results 300.
 
     * Optional Parameters:
-    * @param transaction_id
+    * @param user_id
+    * @param customer_account_id
+    * @param email_address
+    * @param username
+    * @param access_level
+    * @param IAM_policy_id
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param verified
+
+*/
+
+public function listUser($parameters = array()) { return $this->http('GET','User/List', $parameters); }
+
+
+
+/* createUser
+
+Create a new user connected to a customer account.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param first_name
+    * @param last_name
+    * @param email_address
+    * @param access_level
+    * @param IAM_policy_id
+    * @param locale
+    * @param timezone_id
+    * @param send_new_user_email
+
+    * Optional Parameters:
+    * @param phone_number_country_code
+    * @param phone_number
+    * @param password
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param avatar_uri
+
+*/
+
+public function createUser($parameters = array()) { return $this->http('POST','User/Create', $parameters); }
+
+
+
+/* updateUser
+
+Update an existing user profile. Only provide the parameters you wish to update.
+
+    * Required Parameters:
+    * @param user_id
+    * @param access_level
+    * @param IAM_policy_id
+
+    * Optional Parameters:
+    * @param first_name
+    * @param last_name
+    * @param email_address
+    * @param phone_number_country_code
+    * @param phone_number
+    * @param password
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param avatar_uri
+    * @param locale
+    * @param timezone_id
+
+*/
+
+public function updateUser($parameters = array()) { return $this->http('PATCH','User/Update', $parameters); }
+
+
+
+/* suspendUser
+
+Suspend a user and place the 'user_id' in suspended status.
+
+    * Required Parameters:
+    * @param user_id
+
+*/
+
+public function suspendUser($user_id) { return $this->http('PATCH', 'User/Suspend', ['user_id' => $user_id]); }
+
+
+
+/* deleteUser
+
+Delete a specific user or 'user_id'.
+
+    * Required Parameters:
+    * @param user_id
+
+*/
+
+public function deleteUser($user_id) { return $this->http('PATCH', 'User/Delete', ['user_id' => $user_id]); }
+
+
+
+/* restoreUser
+
+Restore a user from suspended or deleted.
+
+    * Required Parameters:
+    * @param user_id
+
+*/
+
+public function restoreUser($user_id) { return $this->http('PATCH', 'User/Restore', ['user_id' => $user_id]); }
+
+
+
+/* authenticateUser
+
+Authenticate a user as part of a sign in process.
+
+    * Optional Parameters:
+    * @param email_address
+    * @param username
+    * @param password
+    * @param override_password_requirement
+    * @param ip_address
+    * @param url
+    * @param temporary_token
+
+*/
+
+public function authenticateUser($parameters = array()) { return $this->http('POST','User/Authenticate', $parameters); }
+
+
+
+/* _2FARequestUser
+
+The 2FARequest service sends a two-factor authentication (2FA) verification code to the user through the specified channel: SMS, phone call, or email. Note: SMS and phone call requests may incur additional fees. When using this service to verify an email address (verification_type = 'email'), and the provided email matches a customer account's email address, the customer account will automatically be marked as verified.
+
+    * Required Parameters:
+    * @param verification_user_id
+    * @param verification_method
+
+    * Optional Parameters:
+    * @param verification_email_address
+    * @param verification_number_country_code
+    * @param verification_number
+
+*/
+
+public function _2FARequestUser($parameters = array()) { return $this->http('POST','User/2FARequest', $parameters); }
+
+
+
+/* _2FAVerifyUser
+
+Verify a users identity; email address; or phone number using the verification code sent via the 'User/2FARequest' notification. If verification is successful the users details will be returned with the 'authenticated' namespace set to 'Y'.
+
+    * Required Parameters:
+    * @param verification_user_id
+    * @param verification_code
+    * @param verification_method
+
+    * Optional Parameters:
+    * @param force_verification
+
+*/
+
+public function _2FAVerifyUser($parameters = array()) { return $this->http('POST','User/2FAVerify', $parameters); }
+
+
+
+/* listNote
+
+List notes connected to an account, subscription, or invoice.
+
+    * Optional Parameters:
+    * @param note_id
     * @param customer_account_id
     * @param subscription_id
     * @param invoice_id
-    * @param user_id
-    * @param api_category
-    * @param api_service
-    * @param ip_address
 
 */
 
-public function listTransaction($parameters = array()) { return $this->http('GET','Transaction/List', $parameters); }
+public function listNote($parameters = array()) { return $this->http('GET','Note/List', $parameters); }
 
+
+
+/* createNote
+
+Notes allow you to store short messages (or notes) on the stack and connect them with a customer account, invoice, or subscription for easy cross referencing.
+
+If you have formatted data to store consider using one of 'custom_field_1' or 'custom_field_2', both of which are available on subscriptions, accounts, and invoices.
+
+    * Required Parameters:
+    * @param subject
+    * @param contents
+
+    * Optional Parameters:
+    * @param customer_account_id
+    * @param subscription_id
+    * @param invoice_id
+
+*/
+
+public function createNote($parameters = array()) { return $this->http('POST','Note/Create', $parameters); }
+
+
+
+/* deleteNote
+
+Delete an existing note.
+
+    * Required Parameters:
+    * @param note_id
+
+*/
+
+public function deleteNote($note_id) { return $this->http('DELETE', 'Note/Delete', ['note_id' => $note_id]); }
+
+
+
+/* passwdResetUser
+
+This service will send a temporary password good for one hour to the users e-mail address.
+
+    * Optional Parameters:
+    * @param email_address
+    * @param username
+
+*/
+
+public function passwdResetUser($parameters = array()) { return $this->http('POST','User/PasswdReset', $parameters); }
+
+
+
+/* createTokenUser
+
+Generate a short-lived authentication token for seamless access to the 'User/Authenticate' service, eliminating the need for username and password entry. This token also generates a temporary login link for the Customer Account Management Portal (CAMP). This is ideal for scenarios where a customer is already logged into your application and you want to provide a direct link to CAMP for account management, streamlining their experience.
+
+    * Required Parameters:
+    * @param customer_account_id
+    * @param user_id
+
+    * Optional Parameters:
+    * @param expiration
+    * @param camp_redirect
+
+*/
+
+public function createTokenUser($parameters = array()) { return $this->http('POST','User/CreateToken', $parameters); }
+
+
+
+/* oAuthAuthenticateUser
+
+Creates a link allowing an end-user to sign in or create a new account with a third party identity service. Currently, Facebook and Google are supported identity providers. Upon successful authentication the end-user will be redirected to your 'redirect_uri' with a 'temporary_token' appended to the url. You can call the 'User/Authenticate' service with the 'temporary_token' to retreive the users account details.
+
+    * Required Parameters:
+    * @param identity_service
+    * @param redirect_uri
+    * @param failure_uri
+    * @param create_if_not_exists
+
+*/
+
+public function oAuthAuthenticateUser($parameters = array()) { return $this->http('POST','User/OAuthAuthenticate', $parameters); }
+
+
+
+/* listBrand
+
+List all of the brands connected to your RecurringStack™ account. Depending on your subscription, one RecurringStack™ account can support up to ten different brands.
+
+    * Optional Parameters:
+    * @param search_brand_id
+
+*/
+
+public function listBrand($parameters = array()) { return $this->http('GET','Brand/List', $parameters); }
+
+
+
+/* createBrand
+
+Create a new brand or company.
+
+    * Required Parameters:
+    * @param name
+    * @param description
+    * @param custom_domain
+    * @param logo_url
+
+    * Optional Parameters:
+    * @param website_url
+    * @param website_login_url
+    * @param support_email
+    * @param support_link
+    * @param support_phone
+    * @param terms_url
+    * @param privacy_url
+    * @param social_media_facebook
+    * @param social_media_twitter
+    * @param social_media_youtube
+    * @param social_media_instagram
+    * @param camp_options
+
+*/
+
+public function createBrand($parameters = array()) { return $this->http('POST','Brand/Create', $parameters); }
+
+
+
+/* updateBrand
+
+Update an existing brand. Only pass the parameters you wish to update.
+
+    * Required Parameters:
+    * @param update_brand_id
+
+    * Optional Parameters:
+    * @param name
+    * @param description
+    * @param custom_domain
+    * @param logo_url
+    * @param website_url
+    * @param website_login_url
+    * @param support_email
+    * @param support_link
+    * @param support_phone
+    * @param terms_url
+    * @param privacy_url
+    * @param social_media_facebook
+    * @param social_media_twitter
+    * @param social_media_youtube
+    * @param social_media_instagram
+    * @param camp_options
+
+*/
+
+public function updateBrand($parameters = array()) { return $this->http('PATCH','Brand/Update', $parameters); }
+
+
+
+/* deleteBrand
+
+Delete an existing brand. This operation is currently not reversable. If you have customers with subscriptions on the brand their subscriptions will no longer be billed and the brand_id can no longer be used for authentication with the API.
+
+    * Required Parameters:
+    * @param delete_brand_id
+
+*/
+
+public function deleteBrand($delete_brand_id) { return $this->http('DELETE', 'Brand/Delete', ['delete_brand_id' => $delete_brand_id]); }
+
+
+
+/* listKey
+
+List one or more API keys or search for API keys using one or more of the parameters.
+
+    * Optional Parameters:
+    * @param name
+    * @param connected_brand_id
+
+*/
+
+public function listKey($parameters = array()) { return $this->http('GET','Key/List', $parameters); }
+
+
+
+/* createKey
+
+Create a new API key and associate it with one or more brands.
+
+    * Required Parameters:
+    * @param name
+    * @param brands
+
+*/
+
+public function createKey($parameters = array()) { return $this->http('POST','Key/Create', $parameters); }
+
+
+
+/* updateKey
+
+You can utilize this service to update the name or brands associated with an API key.
+
+    * Required Parameters:
+    * @param api_key_id
+    * @param name
+    * @param brands
+
+*/
+
+public function updateKey($parameters = array()) { return $this->http('PATCH','Key/Update', $parameters); }
+
+
+
+/* deleteKey
+
+Use this service to delete an existing API key.
+
+    * Required Parameters:
+    * @param api_key_id
+
+*/
+
+public function deleteKey($api_key_id) { return $this->http('DELETE', 'Key/Delete', ['api_key_id' => $api_key_id]); }
+
+
+
+/* restoreKey
+
+Restore a previously deleted API key.
+
+    * Required Parameters:
+    * @param api_key_id
+
+*/
+
+public function restoreKey($api_key_id) { return $this->http('PATCH', 'Key/Restore', ['api_key_id' => $api_key_id]); }
+
+
+
+/* listIAMPolicy
+
+List one or more Identity and Access Management (IAM) policies.
+
+    * Optional Parameters:
+    * @param IAM_policy_id
+
+*/
+
+public function listIAMPolicy($parameters = array()) { return $this->http('GET','IAMPolicy/List', $parameters); }
+
+
+
+/* createIAMPolicy
+
+Create a new IAM Policy
+
+    * Required Parameters:
+    * @param name
+    * @param description
+
+*/
+
+public function createIAMPolicy($parameters = array()) { return $this->http('POST','IAMPolicy/Create', $parameters); }
+
+
+
+/* updateIAMPolicy
+
+Update an existing IAM Policy
+
+    * Required Parameters:
+    * @param IAM_policy_id
+
+*/
+
+public function updateIAMPolicy($IAM_policy_id) { return $this->http('PATCH', 'IAMPolicy/Update', ['IAM_policy_id' => $IAM_policy_id]); }
+
+
+
+/* deleteIAMPolicy
+
+Delete an existing IAM Policy
+
+    * Required Parameters:
+    * @param IAM_policy_id
+
+*/
+
+public function deleteIAMPolicy($IAM_policy_id) { return $this->http('DELETE', 'IAMPolicy/Delete', ['IAM_policy_id' => $IAM_policy_id]); }
+
+
+
+/* restoreIAMPolicy
+
+Restore a IAM Policy from deleted.
+
+    * Required Parameters:
+    * @param IAM_policy_id
+
+*/
+
+public function restoreIAMPolicy($IAM_policy_id) { return $this->http('PATCH', 'IAMPolicy/Restore', ['IAM_policy_id' => $IAM_policy_id]); }
+
+
+
+/* listReports
+
+List or retreive an existing report
+
+    * Required Parameters:
+    * @param report_id
+
+*/
+
+public function listReports($report_id) { return $this->http('GET', 'Reports/List', ['report_id' => $report_id]); }
+
+
+
+/* createReports
+
+Create a new report
+
+    * Required Parameters:
+    * @param report_type
+    * @param customer_account_id
+
+    * Optional Parameters:
+    * @param report_name
+
+*/
+
+public function createReports($parameters = array()) { return $this->http('POST','Reports/Create', $parameters); }
+
+
+
+/* deleteReports
+
+Delete a report
+
+    * Required Parameters:
+    * @param report_id
+
+*/
+
+public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }
 
 
 
