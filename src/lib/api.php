@@ -618,6 +618,7 @@ List all components or all components nested under the specified 'product_group_
 
     * Optional Parameters:
     * @param component_id
+    * @param product_group_id
     * @param custom_field_1
     * @param custom_field_2
 
@@ -1057,6 +1058,7 @@ List payments connected to a customer account, invoice, or subscription.
     * @param pay_method_id
     * @param subscription_id
     * @param payment_transaction_id
+    * @param status
 
 */
 
@@ -1799,6 +1801,7 @@ List all customer accounts connected to a specific brand or provide any of the s
     * @param custom_field_2
     * @param verified
     * @param order
+    * @param include_intent
 
 */
 
@@ -2092,6 +2095,43 @@ Verify a users identity; email address; or phone number using the verification c
 */
 
 public function _2FAVerifyUser($parameters = array()) { return $this->http('POST','User/2FAVerify', $parameters); }
+
+
+
+/* createIntentAccount
+
+Intent customer account creation creates a temporary customer account for real-time signup flows, allowing payment method setup before the customer fully commits. Intent accounts suppress new-account notifications at creation time, can be reused if the customer already exists (pre_existing=Y), are restricted to PayMethod and Subscription workflows, and are automatically converted to a live customer account when a subscription is successfully created. Any intent account that is not converted within 24 hours is automatically cleaned up.
+
+    * Required Parameters:
+    * @param first_name
+    * @param last_name
+    * @param email_address
+    * @param country
+    * @param locale
+    * @param timezone_id
+
+    * Optional Parameters:
+    * @param company_name
+    * @param cc_email_address
+    * @param phone_number_country_code
+    * @param phone_number
+    * @param address
+    * @param address_2
+    * @param unit
+    * @param unit_type
+    * @param city
+    * @param state
+    * @param zip_code
+    * @param tax_id
+    * @param tax_exempt
+    * @param tax_exempt_reason
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param password
+
+*/
+
+public function createIntentAccount($parameters = array()) { return $this->http('POST','Account/CreateIntent', $parameters); }
 
 
 
@@ -2435,9 +2475,12 @@ Create a new report
     * Required Parameters:
     * @param report_type
     * @param customer_account_id
+    * @param start_date
+    * @param end_date
 
     * Optional Parameters:
     * @param report_name
+    * @param force_refresh
 
 */
 
@@ -2455,6 +2498,7 @@ Delete a report
 */
 
 public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }
+
 
 
 

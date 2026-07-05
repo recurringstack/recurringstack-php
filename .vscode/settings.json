@@ -2,7 +2,15 @@
     "workbench.colorCustomizations": {
         "activityBar.background": "#5E0B1E",
         "titleBar.activeBackground": "#830F2A",
-        "titleBar.activeForeground": "#FFFBFC"
+        "titleBar.activeForeground": "#FFFBFC",
+        "titleBar.inactiveBackground": "#5D0B1E",
+        "titleBar.inactiveForeground": "#FFFBFC",
+        "statusBar.background": "#5D0B1E",
+        "statusBar.foreground": "#FFFBFC",
+        "statusBar.debuggingBackground": "#5D0B1E",
+        "statusBar.debuggingForeground": "#FFFBFC",
+        "statusBar.noFolderBackground": "#5D0B1E",
+        "statusBar.noFolderForeground": "#FFFBFC"
     },
     "cSpell.words": [
         "recurringstack"
