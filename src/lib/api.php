@@ -50,7 +50,6 @@ class api {
 
 
 
-
 /* listWebhook
 
 List webhook subscriptions
@@ -1054,8 +1053,8 @@ Sets (or removes) a payment gateway as the brand's default gateway for credit ca
     * @param gateway_id
 
     * Optional Parameters:
-    * @param default_cc
-    * @param default_ba
+    * @param default_cc_gateway
+    * @param default_ach_gateway
 
 */
 
@@ -1145,8 +1144,8 @@ Create or link a new payment gateway to process real-time payments.
     * Optional Parameters:
     * @param credentials_2
     * @param credentials_3
-    * @param default_cc
-    * @param default_ba
+    * @param default_cc_gateway
+    * @param default_ach_gateway
 
 */
 
@@ -2511,8 +2510,7 @@ Delete a report
 
 */
 
-public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }      
-
+public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }
 
 
 
