@@ -49,7 +49,6 @@ class api {
 
 
 
-        
 
 
 /* listWebhook
@@ -1047,6 +1046,23 @@ public function deletePayMethod($pay_method_id) { return $this->http('DELETE', '
 
 
 
+/* setDefaultPayGateway
+
+Sets (or removes) a payment gateway as the brand's default gateway for credit card and/or ACH/bank-account transactions. This is a toggle — if the specified gateway is already the default for a given type, calling SetDefault again clears it instead of re-setting it.
+
+    * Required Parameters:
+    * @param gateway_id
+
+    * Optional Parameters:
+    * @param default_cc
+    * @param default_ba
+
+*/
+
+public function setDefaultPayGateway($parameters = array()) { return $this->http('PATCH','PayGateway/SetDefault', $parameters); }
+
+
+
 /* listPayment
 
 List payments connected to a customer account, invoice, or subscription.
@@ -1149,8 +1165,7 @@ Update a previously linked payment gateway and/or set it as the brands default c
 
     * Optional Parameters:
     * @param credentials_2
-    * @param default_cc
-    * @param default_ba
+    * @param credentials_3
 
 */
 
@@ -1858,7 +1873,6 @@ Update information on an existing customers account.
     * @param company_name
     * @param first_name
     * @param last_name
-    * @param email_address
     * @param cc_email_address
     * @param phone_number_country_code
     * @param phone_number
@@ -2268,7 +2282,7 @@ Create a new brand or company.
     * @param social_media_twitter
     * @param social_media_youtube
     * @param social_media_instagram
-    * @param camp_options
+    * @param customization_options
 
 */
 
@@ -2299,7 +2313,7 @@ Update an existing brand. Only pass the parameters you wish to update.
     * @param social_media_twitter
     * @param social_media_youtube
     * @param social_media_instagram
-    * @param camp_options
+    * @param customization_options
 
 */
 
@@ -2497,7 +2511,7 @@ Delete a report
 
 */
 
-public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }
+public function deleteReports($report_id) { return $this->http('DELETE', 'Reports/Delete', ['report_id' => $report_id]); }      
 
 
 

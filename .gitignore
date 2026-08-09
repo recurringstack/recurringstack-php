@@ -3,3 +3,4 @@ vendor/
 vendor
 .vscode/
 .vscode
+.vscode/settings.json
