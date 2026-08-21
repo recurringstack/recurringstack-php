@@ -48,8 +48,6 @@ class api {
         }
 
 
-
-
 /* listWebhook
 
 List webhook subscriptions
@@ -409,19 +407,6 @@ RecurringStack™ may also suspend a subscription in accordance with your dunnin
 */
 
 public function restoreSubscription($subscription_id) { return $this->http('PATCH', 'Subscription/Restore', ['subscription_id' => $subscription_id]); }
-
-
-
-/* listOffer
-
-List one or more offers connected to the brand.
-
-    * Optional Parameters:
-    * @param offer_id
-
-*/
-
-public function listOffer($parameters = array()) { return $this->http('GET','Offer/List', $parameters); }
 
 
 
@@ -906,6 +891,78 @@ Delete a coupon.
 */
 
 public function deleteCoupon($coupon_id) { return $this->http('DELETE', 'Coupon/Delete', ['coupon_id' => $coupon_id]); }
+
+
+
+/* createOffer
+
+Create an offer containtaing at least one product and unlimited components. This service will return a 'checkout_url' where you can direct your customer to purchase the offer.
+
+    * Required Parameters:
+    * @param name
+    * @param description
+    * @param product_id
+    * @param success_url
+
+    * Optional Parameters:
+    * @param attached_components
+    * @param cancel_url
+    * @param failure_url
+
+*/
+
+public function createOffer($parameters = array()) { return $this->http('POST','Offer/Create', $parameters); }
+
+
+
+/* updateOffer
+
+Update an exsting product offer.
+
+    * Required Parameters:
+    * @param offer_id
+    * @param name
+    * @param description
+    * @param product_id
+    * @param success_url
+
+    * Optional Parameters:
+    * @param attached_components
+    * @param cancel_url
+    * @param failure_url
+
+*/
+
+public function updateOffer($parameters = array()) { return $this->http('PATCH','Offer/Update', $parameters); }
+
+
+
+/* deleteOffer
+
+Delete an existing product offer.
+
+    * Required Parameters:
+    * @param offer_id
+
+*/
+
+public function deleteOffer($offer_id) { return $this->http('DELETE', 'Offer/Delete', ['offer_id' => $offer_id]); }
+
+
+
+/* listOffer
+
+List one or more offers connected to the brand.
+
+    * Optional Parameters:
+    * @param offer_id
+    * @param product_id
+    * @param component_id
+    * @param status
+
+*/
+
+public function listOffer($parameters = array()) { return $this->http('GET','Offer/List', $parameters); }
 
 
 
@@ -2214,7 +2271,7 @@ public function passwdResetUser($parameters = array()) { return $this->http('POS
 
 /* createTokenUser
 
-Generate a short-lived authentication token for seamless access to the 'User/Authenticate' service, eliminating the need for username and password entry. This token also generates a temporary login link for the Customer Account Management Portal (CAMP). This is ideal for scenarios where a customer is already logged into your application and you want to provide a direct link to CAMP for account management, streamlining their experience.
+Generate a short-lived authentication token (magic link) for seamless access to the 'User/Authenticate' service, eliminating the need for username and password entry. This token also generates a temporary magic link for automated login to the account panel. This is ideal for scenarios where a customer is already logged into your application and you want to provide a direct link to the account panel for account management, streamlining their experience.
 
     * Required Parameters:
     * @param customer_account_id
@@ -2222,7 +2279,7 @@ Generate a short-lived authentication token for seamless access to the 'User/Aut
 
     * Optional Parameters:
     * @param expiration
-    * @param camp_redirect
+    * @param redirect
 
 */
 
