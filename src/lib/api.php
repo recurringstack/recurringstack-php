@@ -48,6 +48,8 @@ class api {
         }
 
 
+
+
 /* listWebhook
 
 List webhook subscriptions
@@ -395,11 +397,29 @@ public function reportUsageSubscription($parameters = array()) { return $this->h
 
 
 
+/* pauseSubscription
+
+Temporarily pauses billing for a set number of billing cycles without canceling the subscription. The pause takes effect on the next renewal date, so there are no mid-cycle adjustments. Billing resumes automatically when the pause period ends, and the subscription can also be restored manually at any time.
+
+    * Required Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+
+    * Optional Parameters:
+    * @param pause_reason
+    * @param pause_billing_cycles
+
+*/
+
+public function pauseSubscription($parameters = array()) { return $this->http('PATCH','Subscription/Pause', $parameters); }
+
+
+
 /* restoreSubscription
 
-If you suspended or paused a subscription for any reason you can utilize this service to restore it.
+If you suspended, paused, or scheduled a pause for a subscription you can utilize this service to restore it.
 
-RecurringStack™ may also suspend a subscription in accordance with your dunning rules (usually when a customer has unpaid invoices), this service may be used to override these kind of suspension as well.
+RecurringStack™ may also suspend a subscription in accordance with your dunning rules (usually when a customer has unpaid invoices), this service may be used to override tsuspensions of this type as well.
 
     * Required Parameters:
     * @param subscription_id
@@ -737,6 +757,7 @@ Create a product.
     * @param trial_interval
     * @param trial_price
     * @param auto_pay_discount_amount
+    * @param allow_pause
     * @param custom_field_1
     * @param custom_field_2
 
@@ -766,6 +787,7 @@ Update a product.
     * @param trial_interval
     * @param trial_price
     * @param auto_pay_discount_amount
+    * @param allow_pause
     * @param custom_field_1
     * @param custom_field_2
 
@@ -2339,6 +2361,7 @@ Create a new brand or company.
     * @param social_media_youtube
     * @param social_media_instagram
     * @param customization_options
+    * @param allowed_redirect_domains
 
 */
 
@@ -2370,6 +2393,7 @@ Update an existing brand. Only pass the parameters you wish to update.
     * @param social_media_youtube
     * @param social_media_instagram
     * @param customization_options
+    * @param allowed_redirect_domains
 
 */
 
