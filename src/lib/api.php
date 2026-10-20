@@ -378,11 +378,9 @@ public function deleteSubscription($subscription_id) { return $this->http('DELET
 
 
 
-/* reportUsageSubscription
+/* createSubscriptionUsage
 
-This service allows you to report usage for a compnent already attached to a subscription.
-
-You may choose to report metered or prepaid usage as you wish. If usage events occur in your system very frequently (hundreads of times an hour or more), it is best to accumulate usage into batches on your side, and then report those batches less frequently, such as daily. This will ensure you remain below any API throttling limits.
+This service creates a new usage event for a component already attached to a subscription. You may report either metered or prepaid usage as needed. If your system generates usage events at very high frequency (hundreds per hour or more), it’s best to aggregate them on your side and report in periodic batches—such as daily—to avoid hitting API throttling limits.
 
     * Required Parameters:
     * @param subscription_id
@@ -393,7 +391,7 @@ You may choose to report metered or prepaid usage as you wish. If usage events o
 
 */
 
-public function reportUsageSubscription($parameters = array()) { return $this->http('PATCH','Subscription/ReportUsage', $parameters); }
+public function createSubscriptionUsage($parameters = array()) { return $this->http('POST','SubscriptionUsage/Create', $parameters); }
 
 
 
@@ -412,6 +410,39 @@ Temporarily pauses billing for a set number of billing cycles without canceling 
 */
 
 public function pauseSubscription($parameters = array()) { return $this->http('PATCH','Subscription/Pause', $parameters); }
+
+
+
+/* listSubscriptionUsage
+
+This service returns all usage events recorded for a component attached to one or more subscriptions. You can use this endpoint to review historical metered usage, audit consumption patterns, or feed usage data into reporting and analytics systems. Results may include usage events from one or more subscriptions depending on your query parameters.
+
+    * Optional Parameters:
+    * @param usage_record_id
+    * @param subscription_id
+    * @param customer_account_id
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param status
+
+*/
+
+public function listSubscriptionUsage($parameters = array()) { return $this->http('GET','SubscriptionUsage/List', $parameters); }
+
+
+
+/* deleteSubscriptionUsage
+
+This service removes a previously created usage event from a subscription’s component. Deleting an event is useful when correcting over‑reported usage, reversing accidental submissions, or maintaining accurate metered/prepaid consumption totals. Only the specified usage event is removed; all other usage history remains intact.
+
+    * Optional Parameters:
+    * @param usage_record_id
+    * @param customer_account_id
+    * @param subscription_id
+
+*/
+
+public function deleteSubscriptionUsage($parameters = array()) { return $this->http('DELETE','SubscriptionUsage/Delete', $parameters); }
 
 
 
@@ -452,8 +483,15 @@ public function updateAutoPaySubscription($parameters = array()) { return $this-
 
 Find events connected to a subscrption.
 
+    * Required Parameters:
+    * @param subscription_id
+    * @param customer_account_id
+
     * Optional Parameters:
     * @param event_id
+    * @param custom_field_1
+    * @param custom_field_2
+    * @param status
 
 */
 
@@ -466,9 +504,9 @@ public function listSubscriptionEvent($parameters = array()) { return $this->htt
 Create a new subscription event. Events can record actions that take place outside of normal subscription billing but are connected to the subscription. For example, a pre-cooked food service may record an event each time it ships a new food box to a customer.
 
     * Required Parameters:
-    * @param event_type
     * @param subscription_id
     * @param customer_account_id
+    * @param event_type
     * @param name
     * @param description
 
@@ -1003,7 +1041,7 @@ public function listDunningRule($parameters = array()) { return $this->http('GET
 
 /* createDunningRule
 
-Create a new dunning rule. Dunning rules determine when a subscription is suspended or deleted based on the status of past-due invoices linked to the subscription.
+Dunning rules determine when a subscription is suspended or deleted based on the status of past-due invoices linked to the subscription. In the absence of custom rules, the system applies a 90-day fail-safe recovery cycle that transitions to Grace Period at 30 days, Suspension at 60 days, and Cancellation at 90 days.
 
     * Required Parameters:
     * @param product_group_id
@@ -1811,17 +1849,15 @@ Create and customize a new email notification. Notifications can be triggered fo
 Until and unless a notification is setup you or your customers will not receive any emails from the RecurringStack™ platform during the normal course of business.
 
     * Required Parameters:
+    * @param notification_type
     * @param notification_event
-    * @param default_notify_brand
-    * @param default_notify_customer
+    * @param subject
+    * @param html
     * @param from_email
+    * @param default_notify
 
     * Optional Parameters:
-    * @param default_notify_brand_email
-    * @param subject_brand
-    * @param subject_customer
-    * @param html_brand
-    * @param html_customer
+    * @param default_notify_email
 
 */
 
@@ -1835,16 +1871,15 @@ Update an existing email notification template.
 
     * Required Parameters:
     * @param notification_id
-    * @param default_notify_brand
-    * @param default_notify_customer
+    * @param notification_type
     * @param from_email
+    * @param subject
+    * @param html
+    * @param default_notify
 
     * Optional Parameters:
-    * @param default_notify_brand_email
-    * @param subject_brand
-    * @param subject_customer
-    * @param html_brand
-    * @param html_customer
+    * @param notification_event
+    * @param default_notify_email
 
 */
 
@@ -1895,6 +1930,8 @@ List all customer accounts connected to a specific brand or provide any of the s
     * @param verified
     * @param order
     * @param include_intent
+    * @param page
+    * @param results_per_page
 
 */
 
@@ -1969,8 +2006,6 @@ Update information on an existing customers account.
     * @param tax_exempt_reason
     * @param custom_field_1
     * @param custom_field_2
-    * @param page
-    * @param results_per_page
 
 */
 
@@ -2054,8 +2089,6 @@ Create a new user connected to a customer account.
     * @param send_new_user_email
 
     * Optional Parameters:
-    * @param phone_number_country_code
-    * @param phone_number
     * @param password
     * @param custom_field_1
     * @param custom_field_2
@@ -2080,14 +2113,13 @@ Update an existing user profile. Only provide the parameters you wish to update.
     * @param first_name
     * @param last_name
     * @param email_address
-    * @param phone_number_country_code
-    * @param phone_number
     * @param password
     * @param custom_field_1
     * @param custom_field_2
     * @param avatar_uri
     * @param locale
     * @param timezone_id
+    * @param twoFactorEnabled
 
 */
 
@@ -2155,7 +2187,7 @@ public function authenticateUser($parameters = array()) { return $this->http('PO
 
 /* _2FARequestUser
 
-The 2FARequest service sends a two-factor authentication (2FA) verification code to the user through the specified channel: SMS, phone call, or email. Note: SMS and phone call requests may incur additional fees. When using this service to verify an email address (verification_type = 'email'), and the provided email matches a customer account's email address, the customer account will automatically be marked as verified.
+The 2FARequest service sends a two-factor authentication (2FA) verification code to the user through the specified channel: SMS, or email. Note: SMS verification requests may incur additional fees. When using this service to verify an email address (verification_type = 'email'), and the provided email matches a customer account's email address, the customer account will automatically be marked as verified.
 
     * Required Parameters:
     * @param verification_user_id
@@ -2165,6 +2197,7 @@ The 2FARequest service sends a two-factor authentication (2FA) verification code
     * @param verification_email_address
     * @param verification_number_country_code
     * @param verification_number
+    * @param twoFactorEnabled
 
 */
 
@@ -2174,7 +2207,7 @@ public function _2FARequestUser($parameters = array()) { return $this->http('POS
 
 /* _2FAVerifyUser
 
-Verify a users identity; email address; or phone number using the verification code sent via the 'User/2FARequest' notification. If verification is successful the users details will be returned with the 'authenticated' namespace set to 'Y'.
+Verify a users email address or phone number using the verification code sent via the 'User/2FARequest' service. If verification is successful the users details will be returned with the 'authenticated' namespace set to 'Y'.
 
     * Required Parameters:
     * @param verification_user_id
